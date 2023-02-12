@@ -9,11 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/joy": "^5.0.0-alpha.66",
     "@mui/material": "^5.11.8",
     "@mui/styled-engine-sc": "^5.11.0",
+    "concurrently": "^7.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
+    "react-router-dom": "^6.8.1",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
