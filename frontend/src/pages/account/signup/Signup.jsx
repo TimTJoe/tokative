@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import { useForm } from "react-hook-form"
 import { Link, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-
+import Pattern from '../components/Pattern';
 
 
 const Body = styled.div`
@@ -32,36 +32,6 @@ export default function Signup() {
     })
     const { setError, register, handleSubmit, formState: { errors } } = useForm()
     const handleErrors = (errors) => { }
-
-    
-    const Pattern = {
-
-        fullname: {
-            required: "Full name is required",
-            pattern: {
-                value: /^[A-Z0-9.-]/i,
-                message: "Invalid character in name."
-            }
-        },
-        email: {
-            required: "Email is required",
-            pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Email is invalid. Try another one."
-            }
-        },
-        gender: {
-            required: "Gender is required",
-            // pattern: {}
-        },
-        password: {
-            required: "Password is required",
-            minLength: {
-                value: 8,
-                message: "Password must be 8+ characters."
-            }
-        },
-    }
 
     function handleChange(e) {
         setValues({ ...values, [e.target.name]: e.target.value })
@@ -89,6 +59,10 @@ export default function Signup() {
                         label="Full name"
                         name="fullname"
                         type="text"
+                        value={values.fullname}
+                        {...register("fullname", Pattern.fullname)}
+                        error={Boolean(errors.fullname)}
+                        helperText={errors.fullname?.message}
                         onChange={handleChange}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
@@ -97,6 +71,7 @@ export default function Signup() {
                         label="Email"
                         name="email"
                         type="email"
+                        value={values.email}
                         {...register("email", Pattern.email)}
                         error={Boolean(errors.email)}
                         helperText={errors.email?.message}
@@ -108,6 +83,7 @@ export default function Signup() {
                         label="Password"
                         name="password"
                         type="password"
+                        value={values.password}
                         {...register("password", Pattern.password)}
                         error={Boolean(errors.password)}
                         helperText={errors.password?.message}
@@ -119,11 +95,15 @@ export default function Signup() {
                         label="Gender"
                         name="gender"
                         type="text"
+                        value={values.gender}
+                        {...register("gender", Pattern.gender)}
+                        error={Boolean(errors.gender)}
+                        helperText={errors.gender?.message}
                         onChange={handleChange}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
-                    
+
 
                     <Button
                         type="submit"
@@ -138,7 +118,7 @@ export default function Signup() {
                             mx: "auto",
                             color: `${grey[700]}`
                         }}
-                        // endDecorator={<Link href="/login" >Log in</Link>}
+                    // endDecorator={<Link href="/login" >Log in</Link>}
                     >Already have an account? </Typography>
 
                 </Form>
