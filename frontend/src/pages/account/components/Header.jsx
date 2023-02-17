@@ -8,15 +8,15 @@ const Container = styled.header`
 `
 const Headline = styled(Typography)`
     && {
-        color: ${grey[800]};
+        color: black;
         line-height: 1;
         font-weight: 900;
     }
 `
 const Tagline = styled(Typography)`
     && {
-        color: ${grey[500]};
-        line-height: 1;
+        color: ${grey[600]};
+        /* line-height: 1; */
     }
 `
 

@@ -6,7 +6,8 @@ const Header = styled.div`
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
-    padding: 12px 6px;
+    padding: 6px;
+    padding-left: 24px;
 `
 
 

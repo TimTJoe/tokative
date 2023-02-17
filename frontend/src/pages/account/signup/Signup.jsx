@@ -6,24 +6,38 @@ import Header from '../components/Header';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { useForm } from "react-hook-form"
-import { Link, Typography } from '@mui/material';
+import { Link, Typography, TextField, MenuItem } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Pattern from '../components/Pattern';
+import Body from '../components/Body';
+import FormBox from '../components/FormBox';
+import Option from '../components/Option';
+import Select from '../components/Select';
+import useTitle from '@hooks/useTitle';
 
+// import axios from "axios"
 
-const Body = styled.div`
-    min-height: 98vh;
-    /* background-color: #909193; */
-`
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: 12px;
-    gap: 12px;
-`
+const SIGNUP_URI = "http://localhost:8020/signup"
+
+const genders = [
+  {
+    value: 'male',
+    label: 'Male',
+  },
+  {
+    value: 'female',
+    label: 'Female',
+  },
+  {
+    value: 'others',
+    label: 'Others',
+  },
+]
 
 export default function Signup() {
+    
+    useTitle("Tokative - Create a new account | Sign up")
+
     const [values, setValues] = useState({
         fullname: "",
         email: "",
@@ -38,7 +52,7 @@ export default function Signup() {
     }
 
     const handleSignup = async (e) => {
-        e.preventDefault()
+        // e.preventDefault()
         alert(JSON.stringify(values))
     }
     return (
@@ -47,9 +61,9 @@ export default function Signup() {
             <Sheet >
                 <Header
                     headline="Welcome!"
-                    tagline="Sign up to continue."
+                    tagline="Create a new account"
                 />
-                <Form
+                <FormBox
                     method='POST'
                     autoComplete='off'
                     onSubmit={handleSubmit(handleSignup, handleErrors)}
@@ -91,10 +105,10 @@ export default function Signup() {
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
-                    <Input
-                        label="Gender"
-                        name="gender"
-                        type="text"
+                    <Option
+                        select
+                        defaultValue="Male"
+                        label="Select Gender"
                         value={values.gender}
                         {...register("gender", Pattern.gender)}
                         error={Boolean(errors.gender)}
@@ -102,26 +116,32 @@ export default function Signup() {
                         onChange={handleChange}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
-                    />
-
-
+                    >
+                        {genders.map((option) => (
+                            <Select key={option.value} value={option.value}>
+                            {option.label}
+                            </Select>
+                        ))}
+                    </Option>
+                    
                     <Button
                         type="submit"
                         color="primary"
                         variant='contained'
+                        disableElevation
                     >Sign up</Button>
 
                     <Typography
                         variant='body2'
                         sx={{
-                            mt: 4,
+                            mt: 2,
                             mx: "auto",
-                            color: `${grey[700]}`
+                            color: `${grey[700]}`,
+                            textDecoration: 'none',
                         }}
-                    // endDecorator={<Link href="/login" >Log in</Link>}
-                    >Already have an account? </Typography>
+                    > Already have an account? <Link href="/login" underline="none"> Log in </Link>  </Typography>
 
-                </Form>
+                </FormBox>
             </Sheet>
         </Body>
     );
