@@ -14,12 +14,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //ROUTES
 const Signup = require("./routes/signup");
+const Login = require("./routes/login");
 
 //ROUTES HANDLERS
 app.get("/", (req, res) => {
   res.send("Server is running...");
 });
 app.use("/signup", Signup);
+app.use("/login", Login);
 
 //START SERVER & CONNECT TO DB
 app.listen({ port: port }, async () => {
