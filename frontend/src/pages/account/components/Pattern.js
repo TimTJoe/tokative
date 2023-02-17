@@ -2,12 +2,16 @@ const Pattern = {
   fullname: {
     required: "Full name is required",
     pattern: {
-      value: /[a-zA-Z0-9_. ]+/g,
+      value: /^[a-zA-Z. ]+$/i,
       message: "Invalid character in name.",
     },
     minLength: {
       value: 4,
       message: "Name must be 4+ characters.",
+    },
+    maxLength: {
+      value: 25,
+      message: "Too many characters in name.",
     },
   },
   email: {
@@ -16,11 +20,24 @@ const Pattern = {
       value: /\S+@\S+\.\S+/,
       message: "Email is invalid. Try again.",
     },
+    minLength: {
+      value: 4,
+      message: "Email must be 4+ characters.",
+    },
+    maxLength: {
+      value: 25,
+      message: "Too many characters in email.",
+    },
   },
+
   gender: {
     required: "Gender is required",
-    // pattern: {}
+    pattern: {
+      value: /^[a-zA-Z]+$/i,
+      message: "Gender is Invalid.",
+    },
   },
+  
   password: {
     required: "Password is required",
     minLength: {
