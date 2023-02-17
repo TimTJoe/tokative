@@ -1,32 +1,12 @@
 import React from 'react'
-import TextField from '@mui/material/TextField';
+import MuiMenuItem from '@mui/material/MenuItem';
 import styled from "styled-components"
-import {grey}  from "@mui/material/colors"
 
-const Option = styled(TextField)`
+const Option = styled(MuiMenuItem)`
     && {
-
-        .MuiSelect-select {
-            padding: .8rem;
-            border-radius: 10px;
-        }
-
-        label {
-            color: ${grey[800]}
-        }
-    
-        label.Mui-focused {
-            color: ${grey[800]};
-        }
-
-        .Mui-focused fieldset {
-            border-color: ${grey[800]};
-        }
-
-        fieldset {
-            border-radius: 10px;
-        }
-
+        margin: .2rem;
+        padding: .7rem;
+        border-radius: 10px;
     }
 `
 export default Option

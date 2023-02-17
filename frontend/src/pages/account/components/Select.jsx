@@ -1,13 +1,14 @@
 import React from 'react'
-import MenuItem from '@mui/material/MenuItem';
+import MuiInput from './Input';
 import styled from "styled-components"
+import {grey}  from "@mui/material/colors"
 
-const Select = styled(MenuItem)`
+const Select = styled(MuiInput)`
     && {
-        margin: .2rem;
-        padding: .7rem;
-        /* border: solid red; */
-        border-radius: 10px;
+        .MuiSelect-select {
+            padding: .8rem;
+            border-radius: 10px;
+        }
     }
 `
 export default Select

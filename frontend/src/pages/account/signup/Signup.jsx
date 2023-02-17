@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { useForm } from "react-hook-form"
-import { Link, Typography, TextField, MenuItem } from '@mui/material';
+import { Link, Typography, TextField, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Pattern from '../components/Pattern';
 import Body from '../components/Body';
@@ -15,27 +15,27 @@ import Option from '../components/Option';
 import Select from '../components/Select';
 import useTitle from '@hooks/useTitle';
 
-// import axios from "axios"
+import axios from "axios"
 
 const SIGNUP_URI = "http://localhost:8020/signup"
 
 const genders = [
-  {
-    value: 'male',
-    label: 'Male',
-  },
-  {
-    value: 'female',
-    label: 'Female',
-  },
-  {
-    value: 'others',
-    label: 'Others',
-  },
+    {
+        value: 'male',
+        label: 'Male',
+    },
+    {
+        value: 'female',
+        label: 'Female',
+    },
+    {
+        value: 'others',
+        label: 'Others',
+    },
 ]
 
 export default function Signup() {
-    
+
     useTitle("Tokative - Create a new account | Sign up")
 
     const [values, setValues] = useState({
@@ -52,8 +52,15 @@ export default function Signup() {
     }
 
     const handleSignup = async (e) => {
-        // e.preventDefault()
-        alert(JSON.stringify(values))
+        try {
+            const response = await axios.post(SIGNUP_URI, values);
+            const data = response.data;
+            const {message, user} = data
+            console.log({message, user})
+        } catch (error) {
+            const errors = error.response.data.error.errors;
+            console.log(errors)
+        }
     }
     return (
         <Body>
@@ -65,9 +72,7 @@ export default function Signup() {
                 />
                 <FormBox
                     method='POST'
-                    autoComplete='off'
                     onSubmit={handleSubmit(handleSignup, handleErrors)}
-
                 >
                     <Input
                         label="Full name"
@@ -93,6 +98,24 @@ export default function Signup() {
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
+                    
+                    <Select
+                        select
+                        defaultValue="Male"
+                        label="Select Gender"
+                        value={values.gender}
+                        {...register("gender", Pattern.gender)}
+                        error={Boolean(errors.gender)}
+                        helperText={errors.gender?.message}
+                        onChange={handleChange}
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth>
+                        {genders.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                                {option.label}
+                            </Option>
+                        ))}
+                    </Select>
                     <Input
                         label="Password"
                         name="password"
@@ -105,25 +128,7 @@ export default function Signup() {
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
-                    <Option
-                        select
-                        defaultValue="Male"
-                        label="Select Gender"
-                        value={values.gender}
-                        {...register("gender", Pattern.gender)}
-                        error={Boolean(errors.gender)}
-                        helperText={errors.gender?.message}
-                        onChange={handleChange}
-                        InputLabelProps={{ shrink: true }}
-                        fullWidth
-                    >
-                        {genders.map((option) => (
-                            <Select key={option.value} value={option.value}>
-                            {option.label}
-                            </Select>
-                        ))}
-                    </Option>
-                    
+
                     <Button
                         type="submit"
                         color="primary"
