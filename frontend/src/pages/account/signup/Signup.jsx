@@ -60,7 +60,7 @@ export default function Signup() {
         register,
         handleSubmit,
         formState: { errors } } = useForm()
-    const handleErrors = (errors) => { }//TODO: handle server errors
+    const handleErrors = (errors) => { }
 
     function handleChange(e) {
         setValues({ ...values, [e.target.name]: e.target.value })
@@ -75,10 +75,12 @@ export default function Signup() {
             const { success, user } = data
             if (success) {
                 setDisable(false)
+                setLoading(false)
                 navigate("/login", { state: { user }})
             }
         } catch (error) {
             setDisable(false)
+            setLoading(false)
             const errors = error.response.data.error.errors;
             if (errors.fullname) {
                 setError("fullname", { message: errors.fullname })

@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom'
 import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
 import { useNavigate } from "react-router-dom"
+import axios from 'axios';
 
 import Body from "../components/Body"
 import FormBox from "../components/FormBox"
@@ -45,20 +46,28 @@ export default function Login() {
     }
 
     const handleLogin = async (e) => {
+        // alert(JSON.stringify(values))
         setDisable(true)
         setLoading(true)
         try {
             const response = await axios.post(LOGIN_URI, values);
             const data = response.data;
             const { isAuth, user } = data;
-            if(isAuth) {
+            if (isAuth) {
                 navigate("/", { state: { user } })
+            } else {
+                throw {
+                    message: "Incorrect email or password. Try again",
+                }
             }
+
         } catch (error) {
-            const errors = error.response.data.error.errors;
-            if(errors.email) { setError("email", { message: errors.email }) }
-            if(errors.password) { setError("password", { message: errors.password }) }
-            // console.log(error)
+            if (error.message) {
+                setError("password", { message: "Incorrect email or password. Try again" });
+                setError("email", { message: null });
+            }
+            setDisable(false)
+            setLoading(false)
         }
     }
     return (
@@ -66,7 +75,7 @@ export default function Login() {
             <NavBar />
             <Sheet>
                 {loading && <LinearProgress />}
-                
+
                 <Header
                     headline="Welcome!"
                     tagline="Sign in to continue." />
@@ -76,7 +85,10 @@ export default function Login() {
                     autoComplete='on'
                     onSubmit={handleSubmit(handleLogin, handleErrors)}>
 
-                    <Input label="Email" name="email" type="email"
+                    <Input
+                        label="Email"
+                        name="email"
+                        type="email"
                         value={values.email}
                         onFocus={handleOnFocus}
                         {...register("email", Pattern.email)}
@@ -124,7 +136,7 @@ export default function Login() {
                             mt: 2,
                             mx: "auto",
                             color: `${grey[700]}`
-                        }}> Don't have an account?  
+                        }}> Don't have an account?
                         <Link href="/signup" underline="none"> Create new account </Link>
                     </Typography>
                 </FormBox>

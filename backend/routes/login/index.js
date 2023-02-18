@@ -10,34 +10,41 @@ router.get("/", (req, res) => {
 
 //CREATE NEW USER
 router.post("/", async (req, res) => {
+
   const { email, password } = req.body;
+
   try {
+
     const user = await User.findOne({ where: { email } });
+
+    //check if user exists
     if (user === null) {
-      //CHECK PASSWORD
-      //TODO: TEST EACH LINE
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (err) {
-          throw {
-            error: true,
-            msg: "Password is incorrect",
-            isAuth: false,
-          };
-        }
-        res.status(200).json({
-          user: user,
-          isAuth: true,
-        });
-      });
-    } else {
-      res.status(400).json({
+      res.json({
         error: true,
-        msg: "Account doesn't exist",
         isAuth: false,
       });
     }
+
+    //CHECK PASSWORD
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
+        res.json({
+          user,
+          isAuth: result, //true
+        });
+      } else {
+        res.json({
+          error: err,
+          isAuth: result //false,
+        });
+      }
+    }); //bcrypt.compare ends
+
   } catch (error) {
-    res.status(501).json(error);
+    res.status(501).json({
+      error: error,
+      isAuth: false,
+    });
   }
 });
 
