@@ -31,6 +31,10 @@ export default defineConfig({
         find: "@src",
         replacement: path.resolve(__dirname, "src"),
       },
+      {
+        find: "@contexts",
+        replacement: path.resolve(__dirname, "src/contexts"),
+      },
     ],
   },
   server: {

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar';
-import styled from "styled-components"
-import Sheet from '../components/Sheet';
-import Header from '../components/Header';
-import Input from '../components/Input';
-import Button from '../components/Button';
 import { useForm } from "react-hook-form"
-import { Link, Typography, TextField, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Pattern from '../components/Pattern';
-import Body from '../components/Body';
-import FormBox from '../components/FormBox';
-import Option from '../components/Option';
-import Select from '../components/Select';
+import styled from "styled-components"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+axios.defaults.withCredentials = false;
+import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from '@hooks/useTitle';
 
-import axios from "axios"
+import Sheet from '@components/form/Sheet';
+import Header from '@components/form/Header';
+import Input from '@components/form/Input';
+import Button from '@components/form/Button';
+import Pattern from '@components/form/Pattern';
+import Body from '@components/form/Body';
+import FormBox from '@components/form/FormBox';
+import Option from '@components/form/Option';
+import Select from '@components/form/Select';
+
+import NavBar from '../components/NavBar';
+
 
 const SIGNUP_URI = "http://localhost:8020/signup"
 
@@ -35,8 +40,16 @@ const genders = [
 ]
 
 export default function Signup() {
+    const [loading, setLoading] = useState(false)
+    // const [success, setSuccess] = useState(false)
+    const navigate = useNavigate()
+    
+    const [disable, setDisable] = useState(false)
+    function handleOnFocus(e) {
+        setDisable(false)
+    }
+    useTitle("Tokative - Create a new account | Sign up");
 
-    useTitle("Tokative - Create a new account | Sign up")
 
     const [values, setValues] = useState({
         fullname: "",
@@ -44,7 +57,11 @@ export default function Signup() {
         gender: "",
         password: ""
     })
-    const { setError, register, handleSubmit, formState: { errors } } = useForm()
+    const {
+        setError,
+        register,
+        handleSubmit,
+        formState: { errors } } = useForm()
     const handleErrors = (errors) => { }
 
     function handleChange(e) {
@@ -52,20 +69,43 @@ export default function Signup() {
     }
 
     const handleSignup = async (e) => {
+        setDisable(true)
+        setLoading(true)
         try {
             const response = await axios.post(SIGNUP_URI, values);
             const data = response.data;
-            const {message, user} = data
-            console.log({message, user})
+            const { success, user } = data
+            if (success) {
+                setDisable(false)
+                setLoading(false)
+                navigate("/login", { state: { user }})
+            }
         } catch (error) {
+            setDisable(false)
+            setLoading(false)
             const errors = error.response.data.error.errors;
-            console.log(errors)
+            if (errors.fullname) {
+                setError("fullname", { message: errors.fullname })
+            }
+            if (errors.email) {
+                setError("email", { message: errors.email })
+            }
+            if (errors.gender) {
+                setError("gender", { message: errors.gender })
+            }
+            if (errors.password) {
+                setError("password", { message: errors.password })
+            }
+            
         }
     }
     return (
         <Body>
             <NavBar />
+
             <Sheet >
+                { loading && <LinearProgress />}
+
                 <Header
                     headline="Welcome!"
                     tagline="Create a new account"
@@ -75,9 +115,12 @@ export default function Signup() {
                     onSubmit={handleSubmit(handleSignup, handleErrors)}
                 >
                     <Input
+                        autoFocus
+                        onFocus={handleOnFocus}
                         label="Full name"
                         name="fullname"
                         type="text"
+                        placeholder='John Doe'
                         value={values.fullname}
                         {...register("fullname", Pattern.fullname)}
                         error={Boolean(errors.fullname)}
@@ -90,15 +133,17 @@ export default function Signup() {
                         label="Email"
                         name="email"
                         type="email"
+                        placeholder='johndoe@email.com'
                         value={values.email}
                         {...register("email", Pattern.email)}
                         error={Boolean(errors.email)}
                         helperText={errors.email?.message}
                         onChange={handleChange}
+                        onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
-                    
+
                     <Select
                         select
                         defaultValue="Male"
@@ -108,6 +153,7 @@ export default function Signup() {
                         error={Boolean(errors.gender)}
                         helperText={errors.gender?.message}
                         onChange={handleChange}
+                        onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
                         fullWidth>
                         {genders.map((option) => (
@@ -120,11 +166,13 @@ export default function Signup() {
                         label="Password"
                         name="password"
                         type="password"
+                        placeholder='********'
                         value={values.password}
                         {...register("password", Pattern.password)}
                         error={Boolean(errors.password)}
                         helperText={errors.password?.message}
                         onChange={handleChange}
+                        onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                     />
@@ -134,6 +182,7 @@ export default function Signup() {
                         color="primary"
                         variant='contained'
                         disableElevation
+                        disabled={disable}
                     >Sign up</Button>
 
                     <Typography

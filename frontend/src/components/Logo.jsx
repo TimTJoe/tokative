@@ -3,7 +3,7 @@ import logoImg from "@assets/logo_text.svg"
 import styled from 'styled-components'
 
 const Image = styled.img`
-    width: calc(45px * 3);
+    width: 100px;
 `
 
 function Logo(props) {

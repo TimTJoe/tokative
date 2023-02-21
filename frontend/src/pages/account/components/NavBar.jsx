@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from "styled-components"
 import Logo from '@components/Logo';
+import { NavLink } from 'react-router-dom';
 
 const Header = styled.div`
     display: flex;
@@ -14,7 +15,9 @@ const Header = styled.div`
 function NavBar() {
     return (
         <Header >
+            <NavLink to={"/"}>
             <Logo />
+            </NavLink>
         </Header>
     );
 }

@@ -13,8 +13,10 @@ const hashPassword = async (model) => {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
 
-    static associate(models) {
+    static associate({Station}) {
       // define association here
+      this.hasOne(Station, { foreignKey: "user_id" }, { onDelete: "CASCADE" });
+
     }
   }
   User.init(
@@ -30,6 +32,13 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         allowNull: false,
         type: DataTypes.STRING,
+        unique: true,
+        field: "email",
+        message: "Email address already in use!",
+        // unique: {
+        //   args: true,
+        //   msg: "Email address already in use!",
+        // },
       },
       gender: {
         allowNull: false,
