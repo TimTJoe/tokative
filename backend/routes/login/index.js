@@ -32,6 +32,7 @@ router.post("/", async (req, res) => {
           user,
           isAuth: result, //true
         });
+        // req.session.user = user;
       } else {
         res.json({
           error: err,

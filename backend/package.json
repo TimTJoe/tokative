@@ -22,6 +22,7 @@
     "nodemon": "^2.0.20",
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
+    "react-cookie": "^4.1.1",
     "sequelize": "^6.28.0",
     "socket.io": "^4.6.0",
     "uuid": "^9.0.0"

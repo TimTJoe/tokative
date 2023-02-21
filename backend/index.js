@@ -5,26 +5,34 @@ const path = require("path");
 const port = 8020;
 const cors = require("cors");
 const session = require("express-session");
+//ROUTES
+const Signup = require("./routes/signup");
+const Login = require("./routes/login");
+const Station = require("./routes/station");
 
-//SET UP MIDDLEWARE
+// MIDDLEWARE & SESSION 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(
-  session({
-    secret: "secretcode",
-    saveUninitialized: true,
-    resave: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    },
-  })
-);
-//ROUTES
-const Signup = require("./routes/signup");
-const Login = require("./routes/login");
+// app.use(
+//   session({
+//     secret: "secretcode",
+//     saveUninitialized: true,
+//     resave: false,
+//     cookie: {
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+//     },
+//   })
+// );
+
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   next();
+// });
+
+//TODO: SESSION HANDLING
 
 //ROUTES HANDLERS
 app.get("/", (req, res) => {
@@ -32,10 +40,8 @@ app.get("/", (req, res) => {
 });
 app.use("/signup", Signup);
 app.use("/login", Login);
-app.use((req, res, next) => {
-  console.log(req.session);
-  next();
-}); 
+app.use("/station", Station);
+ 
 
 //START SERVER & CONNECT TO DB
 app.listen({ port: port }, async () => {

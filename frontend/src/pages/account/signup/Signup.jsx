@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar';
-import styled from "styled-components"
-import Sheet from '../components/Sheet';
-import Header from '../components/Header';
-import Input from '../components/Input';
-import Button from '../components/Button';
 import { useForm } from "react-hook-form"
 import { Link, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Pattern from '../components/Pattern';
-import Body from '../components/Body';
-import FormBox from '../components/FormBox';
-import Option from '../components/Option';
-import Select from '../components/Select';
-import useTitle from '@hooks/useTitle';
+import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import LinearProgress from '@mui/material/LinearProgress';
-
-
 axios.defaults.withCredentials = false;
+import LinearProgress from '@mui/material/LinearProgress';
+import useTitle from '@hooks/useTitle';
+
+import Sheet from '@components/form/Sheet';
+import Header from '@components/form/Header';
+import Input from '@components/form/Input';
+import Button from '@components/form/Button';
+import Pattern from '@components/form/Pattern';
+import Body from '@components/form/Body';
+import FormBox from '@components/form/FormBox';
+import Option from '@components/form/Option';
+import Select from '@components/form/Select';
+
+import NavBar from '../components/NavBar';
+
+
 const SIGNUP_URI = "http://localhost:8020/signup"
 
 const genders = [
