@@ -6,8 +6,8 @@ const path = require("path");
 const port = process.env.PORT
 const cors = require("cors");
 const session = require("express-session");
-const Passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const passport = require("passport");
+const localStrategy = require("passport-local").Strategy;
 //ROUTES
 const Signup = require("./routes/signup");
 const Login = require("./routes/login");
@@ -21,12 +21,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  // cookie: {
-  //   maxAge: parseInt(process.env.SESSION_LIFETIME),
-  //   sameSite: true,
-  //   secure: process.env.NODE_ENV === "production"
+  cookie: {
+    maxAge: parseInt(process.env.SESSION_LIFETIME),
+    sameSite: true,
+    secure: process.env.NODE_ENV === "production"
 
-  // }
+  }
 }));
 
 // MIDDLEWARE & SESSION 
@@ -35,9 +35,13 @@ app.use(cors(
   {
     origin: process.env.CLIENT_URL,
     credentials: true
-    
   }
 ));
+//SETUP PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
+require("./config/passport")(passport);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));

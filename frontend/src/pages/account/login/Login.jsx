@@ -39,9 +39,10 @@ export default function Login() {
     const [slideIn, setSlideIn] = useState(false)
     const slideRef = useRef(null)
     const navigate = useNavigate()
+    const [statusCode, setStatusCode] = useState(null)
 
     function handleOnFocus() { setDisable(false) }
-    
+
     useEffect(() => {
         setSlideIn(true)
     }, [])
@@ -74,8 +75,11 @@ export default function Login() {
             }
 
         } catch (error) {
+            // alert(JSON.stringify(error.response.status))
+            setStatusCode(error.response.status)
+            console.log(error.response.status)
             if (error.message) {
-                setError("password", { message: "Incorrect email or password. Try again" });
+                setError("password", { message: error.message });
                 setError("email", { message: null });
             }
             setDisable(false)
@@ -88,47 +92,48 @@ export default function Login() {
             <Slidebox ref={slideRef}>
                 <Slide direction="left" in={slideIn} mountOnEnter unmountOnExit container={slideRef.current}>
                     <Box>
-                    <Sheet>
-                        {loading && <LinearProgress />}
+                        <Sheet>
+                            {loading && <LinearProgress />}
+                            {statusCode && statusCode}
 
-                        <Header
-                            headline="Welcome!"
-                            tagline="Sign in to continue." />
+                            <Header
+                                headline="Welcome!"
+                                tagline="Sign in to continue." />
 
-                        <FormBox
-                            method='POST'
-                            autoComplete='on'
-                            onSubmit={handleSubmit(handleLogin, handleErrors)}>
+                            <FormBox
+                                method='POST'
+                                autoComplete='on'
+                                onSubmit={handleSubmit(handleLogin, handleErrors)}>
 
-                            <Input
-                                autoFocus
-                                label="Email"
-                                name="email"
-                                type="email"
-                                value={values.email}
-                                onFocus={handleOnFocus}
-                                {...register("email", Pattern.email)}
-                                error={Boolean(errors.email)}
-                                helperText={errors.email?.message}
-                                onChange={handleChange}
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                            />
-                            <Input
-                                label="Password"
-                                name="password"
-                                type="password"
-                                value={values.password}
-                                onFocus={handleOnFocus}
-                                {...register("password", Pattern.password)}
-                                error={Boolean(errors.password)}
-                                helperText={errors.password?.message}
-                                onChange={handleChange}
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                            />
+                                <Input
+                                    autoFocus
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={values.email}
+                                    onFocus={handleOnFocus}
+                                    {...register("email", Pattern.email)}
+                                    error={Boolean(errors.email)}
+                                    helperText={errors.email?.message}
+                                    onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                />
+                                <Input
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    value={values.password}
+                                    onFocus={handleOnFocus}
+                                    {...register("password", Pattern.password)}
+                                    error={Boolean(errors.password)}
+                                    helperText={errors.password?.message}
+                                    onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                />
 
-                            {/* <Typography variant='body2' sx={{ my: 1, }}>
+                                {/* <Typography variant='body2' sx={{ my: 1, }}>
                                 <Link
                                     href="/signup"
                                     underline="none">
@@ -136,26 +141,23 @@ export default function Login() {
                                 </Link>
                             </Typography> */}
 
-                            <Button
-                                type="submit"
-                                color="primary"
-                                variant='contained'
-                                disableElevation
-                                disabled={disable}
-                            > Log in </Button>
+                                <Button
+                                    type="submit"
+                                    color="primary"
+                                    variant='contained'
+                                    disableElevation
+                                    disabled={disable}
+                                > Log in </Button>
 
-                            <Divider sx={{ mt: 2 }} />
+                                <Divider sx={{ mt: 2 }} />
 
-                            <Typography
-                                variant='body2'
-                                sx={{
-                                    mt: 2,
-                                    mx: "auto",
-                                    color: `${grey[700]}`
-                                }}> Don't have an account?
-                                <Link href="/signup" underline="none"> Create new account </Link>
-                            </Typography>
-                        </FormBox>
+                                <Typography
+                                    variant='body2'
+                                    sx={{ mt: 2, mx: "auto", color: `${grey[700]}` }}> Don't have an account?
+                                    <Link href="/signup" underline="none">
+                                        Create new account </Link>
+                                </Typography>
+                            </FormBox>
                         </Sheet>
                     </Box>
                 </Slide>

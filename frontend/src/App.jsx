@@ -7,7 +7,7 @@ import Login from '@pages/account/login'
 import Station from '@pages/station'
 import Protected from '@components/Protected'
 import axios from 'axios'
-axios.defaults.withCredentials = false;
+axios.defaults.withCredentials = true;
 
 // import UserContext, {UserContextProvider} from '@contexts/UserDetails'
 import { UserDetailsProvider } from '@contexts/UserDetails'
