@@ -8,30 +8,27 @@ router.get("/", (req, res) => {
 });
 
 //CREATE NEW USER
-router.post("/", async (req, res) => {
-  const {fullname, email, gender, password} = req.body;
-  try {
-    const user = await User.create({
-      fullname,
-      email,
-      gender,
-      password
-    });
-    res.status(200).json({
-      user: user,
-      success: true,
-    });
-    
-  } catch (error) {
-    res.status(400).json({
-      error: error,
-      success: false
-    });
-  }
+router.post("/", (req, res) => {
+  User.findOne({ where: { email: req.body.email } }).then((user) => {
+    if (user) res.send({ message: "Email already exists" });
+    else {
+      const newUser = new User({
+        fullname: req.body.fullname,
+        email: req.body.email,
+        gender: req.body.gender,
+        password: req.body.password,
+      });
+      bcrypt.genSalt(10, (err, salt) =>
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser.save().then((user) => res.send(user));
+        })
+      );
+    }
+  });
 });
 
-router.post("/login", async (req, res) => { 
-
-})
+router.post("/login", async (req, res) => {});
 
 module.exports = router;

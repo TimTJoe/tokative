@@ -22,7 +22,7 @@ import Select from '@components/form/Select';
 import NavBar from '../components/NavBar';
 
 
-const SIGNUP_URI = "http://localhost:8020/signup"
+const SIGNUP_URI = "http://localhost:8020/signup/"
 
 const genders = [
     {
@@ -73,30 +73,31 @@ export default function Signup() {
         setLoading(true)
         try {
             const response = await axios.post(SIGNUP_URI, values);
-            const data = response.data;
-            const { success, user } = data
-            if (success) {
-                setDisable(false)
-                setLoading(false)
-                navigate("/login", { state: { user }})
-            }
+            console.log(response.data)
+            // const data = response.data;
+            // const { success, user } = data
+            // if (success) {
+            //     setDisable(false)
+            //     setLoading(false)
+            //     navigate("/login", { state: { user }})
+            // }
         } catch (error) {
             setDisable(false)
             setLoading(false)
-            const errors = error.response.data.error.errors;
-            if (errors.fullname) {
-                setError("fullname", { message: errors.fullname })
-            }
-            if (errors.email) {
-                setError("email", { message: errors.email })
-            }
-            if (errors.gender) {
-                setError("gender", { message: errors.gender })
-            }
-            if (errors.password) {
-                setError("password", { message: errors.password })
-            }
-            
+            console.log(error.response.data)
+            // const errors = error.response.data.error.errors;
+            // if (errors.fullname) {
+            //     setError("fullname", { message: errors.fullname })
+            // }
+            // if (errors.email) {
+            //     setError("email", { message: errors.email })
+            // }
+            // if (errors.gender) {
+            //     setError("gender", { message: errors.gender })
+            // }
+            // if (errors.password) {
+            //     setError("password", { message: errors.password })
+            // }
         }
     }
     return (

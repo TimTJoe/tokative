@@ -7,6 +7,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 import styled from 'styled-components';
 
 import NavBar from "../components/NavBar"
@@ -18,7 +19,7 @@ import Button from "@components/form/Button"
 import Sheet from "@components/form/Sheet"
 import Pattern from '@components/form/Pattern';
 
-const LOGIN_URI = "http://localhost:8020/login"
+const LOGIN_URI = "http://localhost:8020/login/"
 
 const Slidebox = styled(Box)`
     && {
@@ -39,7 +40,7 @@ export default function Login() {
     const [slideIn, setSlideIn] = useState(false)
     const slideRef = useRef(null)
     const navigate = useNavigate()
-    const [statusCode, setStatusCode] = useState(null)
+    const [statusCode, setStatusCode] = useState("")
 
     function handleOnFocus() { setDisable(false) }
 
@@ -64,24 +65,26 @@ export default function Login() {
         setLoading(true)
         try {
             const response = await axios.post(LOGIN_URI, values);
-            const data = response.data;
-            const { isAuth, user } = data;
-            if (isAuth) {
-                navigate("/", { state: { user } })
-            } else {
-                throw {
-                    message: "Incorrect email or password. Try again",
-                }
-            }
+            console.log(response)
+            // const data = response.data;
+            // const { isAuth, user } = data;
+            // if (isAuth) {
+            //     navigate("/", { state: { user } })
+            // } else {
+            //     throw {
+            //         message: "Incorrect email or password. Try again",
+            //     }
+            // }
 
         } catch (error) {
+            console.log(error)
             // alert(JSON.stringify(error.response.status))
-            setStatusCode(error.response.status)
-            console.log(error.response.status)
-            if (error.message) {
-                setError("password", { message: error.message });
-                setError("email", { message: null });
-            }
+            // setStatusCode(error.response.status)
+            // console.log(error.response.status)
+            // if (error.message) {
+            //     setError("password", { message: error.message });
+            //     setError("email", { message: null });
+            // }
             setDisable(false)
             setLoading(false)
         }
