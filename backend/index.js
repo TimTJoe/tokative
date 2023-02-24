@@ -5,9 +5,7 @@ const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const dotenv = require("dotenv").config({
-    path: "./config/config.env",
-});
+const dotenv = require("dotenv").config({path: "./config/config.env",});
 const port = process.env.PORT;
 
 //MIDDLEWARE

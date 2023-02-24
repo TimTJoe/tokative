@@ -25,7 +25,7 @@ const STATION_URI = "http://localhost:8020/station";
 function Station() {
   useTitle("Tokative - Create a New Station")
   const location = useLocation()
-  const {USER} = useContext(UserContext)
+  const {isAuth, profile} = useContext(UserContext)
   // const user = location.state?.user || null;
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
@@ -43,7 +43,7 @@ function Station() {
     station:  "",
     frequency: "",
     bio: "",
-    owner: USER?.uuid || ""
+    owner: profile?.uuid || ""
   })
 
   const { setError, register, handleSubmit, formState: { errors } } = useForm()

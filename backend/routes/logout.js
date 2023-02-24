@@ -7,4 +7,22 @@ router.get("/", (req, res) => {
     res.send("Logged out");
 });
 
+router.delete("/", (req, res, next) => {
+    req.logout(function(err) {
+        if(err) { return next(err)}
+        res.send({
+            message: "logout!"
+        })
+    })
+})
+
+router.post("/", (req, res, next) => {
+    req.logout(function(err) {
+        if(err) { return next(err)}
+        res.send({
+            message: "logout!"
+        })
+    })
+})
+
 module.exports = router;
