@@ -1,59 +1,62 @@
-const { sequelize } = require("./src/models");
-require("dotenv").config();
+const { sequelize, User } = require("./src/models");
 const express = require("express");
 const app = express();
-const path = require("path");
-const port = process.env.PORT
-const cors = require("cors");
+const passport = require("passport");
 const session = require("express-session");
-const Passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const dotenv = require("dotenv").config({
+    path: "./config/config.env",
+});
+const port = process.env.PORT;
+
+//MIDDLEWARE
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
+app.use(
+  session({
+    name: process.env.SESSION_NAME,
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,//1 day
+      secure: process.env.NODE_ENV === "production",
+    },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+require("./config/passport")(passport);
+
 //ROUTES
 const Signup = require("./routes/signup");
 const Login = require("./routes/login");
 const Station = require("./routes/station");
-const User = require("./routes/user");
-const cookieParser = require("cookie-parser");
+const Logout = require("./routes/logout");
 
-//SET UP SESSION
-app.use(session({
-  name: process.env.SESSION_NAME,
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  // cookie: {
-  //   maxAge: parseInt(process.env.SESSION_LIFETIME),
-  //   sameSite: true,
-  //   secure: process.env.NODE_ENV === "production"
-
-  // }
-}));
-
-// MIDDLEWARE & SESSION 
-app.use(cookieParser(process.env.SESSION_SECRET))
-app.use(cors(
-  {
-    origin: process.env.CLIENT_URL,
-    credentials: true
-    
-  }
-));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-
-
+//CHECKER/AUTHENTICATORS
+const isAuth = require("./auth/isAuth")
 //ROUTES HANDLERS
 app.get("/", (req, res) => {
-  req.session.userID = 1234
   res.send(req.session);
 });
 app.use("/login", Login);
+app.use("/logout", Logout);
 app.use("/signup", Signup);
-app.use("/station", Station);
+app.use("/station", isAuth, Station);
 
 //USER ROUTE
-app.use("/user", User)
+app.use("/user", User);
 
 //404 HANDLER
 app.use((req, res, next) => {
@@ -64,7 +67,7 @@ app.use((req, res, next) => {
 //ERROR HANDLER
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.send(err.message)
+  res.send(err.message);
 });
 
 //START SERVER & CONNECT TO DB

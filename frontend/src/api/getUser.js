@@ -5,7 +5,7 @@ dotenv.config();
 /**
  * Get a single user by UUID
  *
- * @param  UUID of the user to return
+ * @param UUID of the user to return
  */
 const getUser = (uuid) => {
   try {

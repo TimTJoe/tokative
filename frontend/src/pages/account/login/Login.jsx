@@ -7,6 +7,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 import styled from 'styled-components';
 
 import NavBar from "../components/NavBar"
@@ -18,7 +19,7 @@ import Button from "@components/form/Button"
 import Sheet from "@components/form/Sheet"
 import Pattern from '@components/form/Pattern';
 
-const LOGIN_URI = "http://localhost:8020/login"
+const LOGIN_URI = "http://localhost:8020/login/"
 
 const Slidebox = styled(Box)`
     && {
@@ -39,9 +40,10 @@ export default function Login() {
     const [slideIn, setSlideIn] = useState(false)
     const slideRef = useRef(null)
     const navigate = useNavigate()
+    const [statusCode, setStatusCode] = useState("")
 
     function handleOnFocus() { setDisable(false) }
-    
+
     useEffect(() => {
         setSlideIn(true)
     }, [])
@@ -63,21 +65,20 @@ export default function Login() {
         setLoading(true)
         try {
             const response = await axios.post(LOGIN_URI, values);
+            console.log(response)
             const data = response.data;
             const { isAuth, user } = data;
             if (isAuth) {
                 navigate("/", { state: { user } })
             } else {
                 throw {
-                    message: "Incorrect email or password. Try again",
+                    errors: data
                 }
             }
 
         } catch (error) {
-            if (error.message) {
-                setError("password", { message: "Incorrect email or password. Try again" });
-                setError("email", { message: null });
-            }
+            console.log(error)
+            setError(error.errors.name, {message: error.errors.message})
             setDisable(false)
             setLoading(false)
         }
@@ -88,47 +89,48 @@ export default function Login() {
             <Slidebox ref={slideRef}>
                 <Slide direction="left" in={slideIn} mountOnEnter unmountOnExit container={slideRef.current}>
                     <Box>
-                    <Sheet>
-                        {loading && <LinearProgress />}
+                        <Sheet>
+                            {loading && <LinearProgress />}
+                            {statusCode && statusCode}
 
-                        <Header
-                            headline="Welcome!"
-                            tagline="Sign in to continue." />
+                            <Header
+                                headline="Welcome!"
+                                tagline="Sign in to continue." />
 
-                        <FormBox
-                            method='POST'
-                            autoComplete='on'
-                            onSubmit={handleSubmit(handleLogin, handleErrors)}>
+                            <FormBox
+                                method='POST'
+                                autoComplete='on'
+                                onSubmit={handleSubmit(handleLogin, handleErrors)}>
 
-                            <Input
-                                autoFocus
-                                label="Email"
-                                name="email"
-                                type="email"
-                                value={values.email}
-                                onFocus={handleOnFocus}
-                                {...register("email", Pattern.email)}
-                                error={Boolean(errors.email)}
-                                helperText={errors.email?.message}
-                                onChange={handleChange}
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                            />
-                            <Input
-                                label="Password"
-                                name="password"
-                                type="password"
-                                value={values.password}
-                                onFocus={handleOnFocus}
-                                {...register("password", Pattern.password)}
-                                error={Boolean(errors.password)}
-                                helperText={errors.password?.message}
-                                onChange={handleChange}
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                            />
+                                <Input
+                                    autoFocus
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={values.email}
+                                    onFocus={handleOnFocus}
+                                    {...register("email", Pattern.email)}
+                                    error={Boolean(errors.email)}
+                                    helperText={errors.email?.message}
+                                    onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                />
+                                <Input
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    value={values.password}
+                                    onFocus={handleOnFocus}
+                                    {...register("password", Pattern.password)}
+                                    error={Boolean(errors.password)}
+                                    helperText={errors.password?.message}
+                                    onChange={handleChange}
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                />
 
-                            {/* <Typography variant='body2' sx={{ my: 1, }}>
+                                {/* <Typography variant='body2' sx={{ my: 1, }}>
                                 <Link
                                     href="/signup"
                                     underline="none">
@@ -136,26 +138,22 @@ export default function Login() {
                                 </Link>
                             </Typography> */}
 
-                            <Button
-                                type="submit"
-                                color="primary"
-                                variant='contained'
-                                disableElevation
-                                disabled={disable}
-                            > Log in </Button>
+                                <Button
+                                    type="submit"
+                                    color="primary"
+                                    variant='contained'
+                                    disableElevation
+                                    disabled={disable}
+                                > Log in </Button>
 
-                            <Divider sx={{ mt: 2 }} />
+                                <Divider sx={{ mt: 2 }} />
 
-                            <Typography
-                                variant='body2'
-                                sx={{
-                                    mt: 2,
-                                    mx: "auto",
-                                    color: `${grey[700]}`
-                                }}> Don't have an account?
-                                <Link href="/signup" underline="none"> Create new account </Link>
-                            </Typography>
-                        </FormBox>
+                                <Typography
+                                    variant='body2'
+                                    sx={{ mt: 2, mx: "auto", color: `${grey[700]}` }}> Don't have an account?
+                                    <Link href="/signup" underline="none"> Create new account </Link>
+                                </Typography>
+                            </FormBox>
                         </Sheet>
                     </Box>
                 </Slide>
