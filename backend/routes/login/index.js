@@ -12,11 +12,19 @@ router.get("/", (req, res) => {
 router.post("/", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
-    if (!user) res.send("No User Exists");
+    if (!user) res.send({
+      isAuth: false,
+      name: info.name,
+      message: info.message,
+      user: null
+    });
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        res.send("Successfully Authenticated");
+        res.send({
+          isAuth: true,
+          user: req.user
+        });
         console.log(req.user);
       });
     }

@@ -40,15 +40,15 @@ const genders = [
 ]
 
 export default function Signup() {
+    useTitle("Tokative - Create a new account | Sign up");
     const [loading, setLoading] = useState(false)
-    // const [success, setSuccess] = useState(false)
-    const navigate = useNavigate()
-    
     const [disable, setDisable] = useState(false)
+    const navigate = useNavigate()
+
     function handleOnFocus(e) {
         setDisable(false)
+        setLoading(false)
     }
-    useTitle("Tokative - Create a new account | Sign up");
 
 
     const [values, setValues] = useState({
@@ -73,31 +73,22 @@ export default function Signup() {
         setLoading(true)
         try {
             const response = await axios.post(SIGNUP_URI, values);
-            console.log(response.data)
-            // const data = response.data;
-            // const { success, user } = data
-            // if (success) {
-            //     setDisable(false)
-            //     setLoading(false)
-            //     navigate("/login", { state: { user }})
-            // }
+            const data = response.data;
+            const { success, user } = data
+            if (success) {
+                setDisable(false)
+                setLoading(false)
+                navigate("/", { state: { user } })
+            } else {
+                throw {
+                    errors: data
+                }
+            }
+
         } catch (error) {
+            setError(error.errors.name, { message: error.errors.message })
             setDisable(false)
             setLoading(false)
-            console.log(error.response.data)
-            // const errors = error.response.data.error.errors;
-            // if (errors.fullname) {
-            //     setError("fullname", { message: errors.fullname })
-            // }
-            // if (errors.email) {
-            //     setError("email", { message: errors.email })
-            // }
-            // if (errors.gender) {
-            //     setError("gender", { message: errors.gender })
-            // }
-            // if (errors.password) {
-            //     setError("password", { message: errors.password })
-            // }
         }
     }
     return (
@@ -105,7 +96,7 @@ export default function Signup() {
             <NavBar />
 
             <Sheet >
-                { loading && <LinearProgress />}
+                {loading && <LinearProgress />}
 
                 <Header
                     headline="Welcome!"
@@ -129,6 +120,7 @@ export default function Signup() {
                         onChange={handleChange}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
+                        required
                     />
                     <Input
                         label="Email"
@@ -143,6 +135,7 @@ export default function Signup() {
                         onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
+                        required
                     />
 
                     <Select
@@ -156,7 +149,9 @@ export default function Signup() {
                         onChange={handleChange}
                         onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
-                        fullWidth>
+                        fullWidth
+                        required
+                    >
                         {genders.map((option) => (
                             <Option key={option.value} value={option.value}>
                                 {option.label}
@@ -176,6 +171,7 @@ export default function Signup() {
                         onFocus={handleOnFocus}
                         InputLabelProps={{ shrink: true }}
                         fullWidth
+                        required
                     />
 
                     <Button

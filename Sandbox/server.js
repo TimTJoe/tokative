@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT;
-const { sequelize, User } = require("./src/models");
+const { sequelize, User } = require("../backend/src/models");
 const bodyParser = require("body-parser");
 
 //MIDDLEWARE
@@ -33,10 +33,9 @@ app.use(
     },
   })
 );
-app.use(passport.initialize())
-app.use(passport.session())
-require("./passportConfig")(passport)
-
+app.use(passport.initialize());
+app.use(passport.session());
+require("./passportConfig")(passport);
 
 //ROUTES
 app.post("/login", (req, res, next) => {
@@ -62,7 +61,6 @@ app.post("/register", (req, res) => {
         email: req.body.email,
         gender: req.body.gender,
         password: req.body.password,
-
       });
       bcrypt.genSalt(10, (err, salt) =>
         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -78,7 +76,7 @@ app.get("/user", (req, res) => {
   console.log(req.body);
 });
 app.get("/", (req, res) => {
-  res.send("server running")
+  res.send("server running");
 });
 
 //START SERVER & CONNECT TO DB

@@ -1,11 +1,12 @@
-const { sequelize, User } = require("./src/models");
+const { sequelize, User } = require("../backend/src/models");
 const bcrypt = require("bcryptjs");
 const localStrategy = require("passport-local");
 
 module.exports = function (passport) {
   passport.use(
-    new localStrategy( { usernameField: "email" },
-        function (email, password, done) {
+    new localStrategy(
+      { usernameField: "email" },
+      function (email, password, done) {
         User.findOne({ where: { email } }).then((user) => {
           if (!user) {
             return done(null, false, {
@@ -22,7 +23,7 @@ module.exports = function (passport) {
           }); //bcrypt ends
         }); //findone ends
       } //email func ends
-    )//localstrategy ends
+    ) //localstrategy ends
   ); //passport use ends
 
   passport.serializeUser((user, cb) => {

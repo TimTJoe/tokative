@@ -66,25 +66,19 @@ export default function Login() {
         try {
             const response = await axios.post(LOGIN_URI, values);
             console.log(response)
-            // const data = response.data;
-            // const { isAuth, user } = data;
-            // if (isAuth) {
-            //     navigate("/", { state: { user } })
-            // } else {
-            //     throw {
-            //         message: "Incorrect email or password. Try again",
-            //     }
-            // }
+            const data = response.data;
+            const { isAuth, user } = data;
+            if (isAuth) {
+                navigate("/", { state: { user } })
+            } else {
+                throw {
+                    errors: data
+                }
+            }
 
         } catch (error) {
             console.log(error)
-            // alert(JSON.stringify(error.response.status))
-            // setStatusCode(error.response.status)
-            // console.log(error.response.status)
-            // if (error.message) {
-            //     setError("password", { message: error.message });
-            //     setError("email", { message: null });
-            // }
+            setError(error.errors.name, {message: error.errors.message})
             setDisable(false)
             setLoading(false)
         }
@@ -157,8 +151,7 @@ export default function Login() {
                                 <Typography
                                     variant='body2'
                                     sx={{ mt: 2, mx: "auto", color: `${grey[700]}` }}> Don't have an account?
-                                    <Link href="/signup" underline="none">
-                                        Create new account </Link>
+                                    <Link href="/signup" underline="none"> Create new account </Link>
                                 </Typography>
                             </FormBox>
                         </Sheet>

@@ -2,14 +2,6 @@
 const {Model} = require('sequelize');
 const bcrypt = require("bcryptjs");
 
-const hashPassword = async (model) => {
-  if (model.password) {
-    const salt = await bcrypt.genSaltSync(10, "a");
-    model.password = bcrypt.hashSync(model.password, salt);
-  }
-};
-
-
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
 
@@ -30,22 +22,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       email: {
-        allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
-        field: "email",
-        message: "Email address already in use!",
-        // unique: {
-        //   args: true,
-        //   msg: "Email address already in use!",
-        // },
+        allowNull: false,
+        unique: {
+          args: true,
+          msg: "Email address already in use!",
+        },
       },
       gender: {
         allowNull: false,
         type: DataTypes.STRING,
       },
       password: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(72),
         allowNull: false,
       },
     },
@@ -53,11 +42,9 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         //hash password before record is CREATED
         beforeCreate: (User) => {
-          hashPassword(User);
         },
         //hash password before record is UPDATE
         beforeUpdate: (User) => {
-          hashPassword(User);
         },
       },
       sequelize,

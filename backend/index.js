@@ -5,7 +5,9 @@ const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config();
+const dotenv = require("dotenv").config({
+    path: "./config/config.env",
+});
 const port = process.env.PORT;
 
 //MIDDLEWARE
@@ -15,15 +17,18 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
 app.use(
   session({
+    name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,//1 day
       secure: process.env.NODE_ENV === "production",
     },
@@ -37,14 +42,18 @@ require("./config/passport")(passport);
 const Signup = require("./routes/signup");
 const Login = require("./routes/login");
 const Station = require("./routes/station");
+const Logout = require("./routes/logout");
 
+//CHECKER/AUTHENTICATORS
+const isAuth = require("./auth/isAuth")
 //ROUTES HANDLERS
 app.get("/", (req, res) => {
   res.send(req.session);
 });
 app.use("/login", Login);
+app.use("/logout", Logout);
 app.use("/signup", Signup);
-app.use("/station", Station);
+app.use("/station", isAuth, Station);
 
 //USER ROUTE
 app.use("/user", User);

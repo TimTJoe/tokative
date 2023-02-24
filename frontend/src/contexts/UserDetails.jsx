@@ -6,14 +6,17 @@ const UserContext = createContext(null)
 
 export function UserDetailsProvider({ children }) {
     const location = useLocation();
-    const USER = location.state?.user || "";
+    const user = location.state?.user || "";
 
     const VALUES = {
-        USER
+        isAuth: user.uuid && true || false,
+        profile: user,
     }
     
   return (
-      <UserContext.Provider value={VALUES}>{ children}</UserContext.Provider>
+      <UserContext.Provider value={VALUES}>
+          {children}
+      </UserContext.Provider>
   )
 }
 
