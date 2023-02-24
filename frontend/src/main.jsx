@@ -1,16 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter as Router } from "react-router-dom"
+import App from './App'
 import './index.css'
-import { BrowserRouter as Router, Routes, Outlet, Route } from "react-router-dom"
-import Index from '@pages/Home'
-import Signup from '@pages/account/signup'
+import UserContext, { UserDetailsProvider } from '@contexts/UserDetails'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/signup" element={<Signup />} />
-    </Routes>
-    <Outlet />
-    </Router>
+  <Router>
+    <UserDetailsProvider>
+      <App />
+    </UserDetailsProvider>
+  </Router>
 )

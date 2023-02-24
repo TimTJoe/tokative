@@ -16,8 +16,12 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src/pages"),
       },
       {
-        find: "@helpers",
-        replacement: path.resolve(__dirname, "src/helpers"),
+        find: "@utils",
+        replacement: path.resolve(__dirname, "src/utils"),
+      },
+      {
+        find: "@hooks",
+        replacement: path.resolve(__dirname, "src/hooks"),
       },
       {
         find: "@assets",
@@ -27,10 +31,18 @@ export default defineConfig({
         find: "@src",
         replacement: path.resolve(__dirname, "src"),
       },
+      {
+        find: "@contexts",
+        replacement: path.resolve(__dirname, "src/contexts"),
+      },
+      {
+        find: "@config",
+        replacement: path.resolve(__dirname, "src/config"),
+      },
     ],
   },
   server: {
-    port: 8030,
+    port: 8021,
     open: true,
   },
 });
