@@ -11,8 +11,6 @@ import UserContext from '@contexts/UserDetails'
 axios.defaults.withCredentials = true;
 
 function App() {
-    // const [isAuth, setIsAuth] = useState(false)
-    // const [user, setUser] = useState(null)
     const { isAuth, profile } = useContext(UserContext)
 
     return (
@@ -21,11 +19,9 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/new/station" element={
-                    <Protected isAuth={isAuth}>
-                        <Station />
-                    </Protected>
-                } />
+                <Route path="/station" 
+                element={<Protected isAuth={isAuth}><Station /></Protected>} />
+            
             </Routes>
             <Outlet />
         </>

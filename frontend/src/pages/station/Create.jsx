@@ -22,11 +22,11 @@ import UserContext from '@contexts/UserDetails';
 
 const STATION_URI = "http://localhost:8020/station";
 
-function Station() {
+function Create() {
   useTitle("Tokative - Create a New Station")
   const location = useLocation()
-  const {isAuth, profile} = useContext(UserContext)
-  // const user = location.state?.user || null;
+  // const {isAuth, profile} = useContext(UserContext)
+  const {isAuth, profile} = location.state
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const [slideIn, setSlideIn] = useState(false)
@@ -83,6 +83,9 @@ function Station() {
   return (
     <Body>
       <Sheet>
+        {
+          isAuth && "isAuthenticated."
+        }
         <Header
           headline="Create a Station"
           tagline="Your own dedicated internet radio station" />
@@ -104,6 +107,7 @@ function Station() {
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
+            required
           />
           <Input
             label="Frequency"
@@ -118,10 +122,10 @@ function Station() {
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
+            required
           />
           <Textarea
             label="About Station"
-            placeholder={USER.uuid}
             name="bio"
             type="text"
             value={values.bio}
@@ -150,4 +154,4 @@ function Station() {
   )
 }
 
-export default Station
+export default Create

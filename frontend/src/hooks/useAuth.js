@@ -2,14 +2,6 @@ import React from 'react'
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function useAuth() {
-    const [isAuth, setIsAuth] = useState(false)
-  //TODO: FETCH DATABASE
-  
-
-  return (
-    <div>useAuth</div>
-  )
+const useAuth = () => {
 }
-
 export default useAuth

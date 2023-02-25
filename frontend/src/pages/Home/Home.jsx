@@ -14,7 +14,8 @@ function Home() {
             <br />
             { isAuth && <Link to="/new">new</Link>}
             <br />
-            <Link to="/new/station">new station</Link>
+            <Link to="/station" state={{isAuth: isAuth, profile:profile}}>new station</Link>
+            <br />
             <Logout />
             {
                 profile && <h1>Welcome {profile.fullname} - {profile.uuid}</h1>
