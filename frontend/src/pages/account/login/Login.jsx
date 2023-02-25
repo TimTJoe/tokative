@@ -65,11 +65,13 @@ export default function Login() {
         setLoading(true)
         try {
             const response = await axios.post(LOGIN_URI, values);
-            console.log(response)
-            const data = response.data;
+            const data = response.data
             const { isAuth, user } = data;
             if (isAuth) {
-                navigate("/", { state: { user } })
+                //set user in local storage
+                localStorage.setItem("user", JSON.stringify(user))
+                //goto home/what user came from
+                navigate("/", { state: { profile: user} })
             } else {
                 throw {
                     errors: data

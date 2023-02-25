@@ -17,33 +17,37 @@ import Button from "@components/form/Button"
 import Sheet from "@components/form/Sheet"
 import Pattern from '@components/form/Pattern';
 import Textarea from '@components/form/Textarea';
-
-import UserContext from '@contexts/UserDetails';
+import {ProvideUser} from '@contexts/withUser';
+import withAuth from '@contexts/withAuth';
+import useData from '@hooks/useData';
 
 const STATION_URI = "http://localhost:8020/station";
 
 function Create() {
   useTitle("Tokative - Create a New Station")
   const location = useLocation()
-  // const {isAuth, profile} = useContext(UserContext)
-  const {isAuth, profile} = location.state
+  const { isAuth } = useContext(withAuth);
+  const user = useData()
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const [slideIn, setSlideIn] = useState(false)
   const slideRef = useRef(null)
   const navigate = useNavigate()
 
-  function handleOnFocus() { setDisable(false) }
+  function handleOnFocus() {
+    setDisable(false)
+    setLoading(false)
+  }
 
   useEffect(() => {
     setSlideIn(true)
-  }, [])
+  }, [location])
 
   const [values, setValues] = useState({
     station:  "",
     frequency: "",
     bio: "",
-    owner: profile?.uuid || ""
+    owner: user?.uuid || ""
   })
 
   const { setError, register, handleSubmit, formState: { errors } } = useForm()
@@ -72,12 +76,11 @@ function Create() {
 
     } catch(error) {
       setDisable(false)
-    setLoading(false)
+      setLoading(false)
       if(error.message) {
         setError(error.name, {message: error.message})
       }
     }
-
   }
 
   return (

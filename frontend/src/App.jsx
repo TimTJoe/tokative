@@ -1,17 +1,16 @@
 import React, { useState, useContext } from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Outlet, Route } from "react-router-dom"
+import { Routes, Outlet, Route } from "react-router-dom"
 import Index from '@pages/Home'
 import Signup from '@pages/account/signup'
 import Login from '@pages/account/login'
 import Station from '@pages/station'
 import Protected from '@components/Protected'
 import axios from 'axios'
-import UserContext from '@contexts/UserDetails'
+import withAuth from '@contexts/withAuth'
 axios.defaults.withCredentials = true;
 
 function App() {
-    const { isAuth, profile } = useContext(UserContext)
+    const {isAuth} = useContext(withAuth)
 
     return (
         <>
@@ -19,9 +18,10 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/station" 
-                element={<Protected isAuth={isAuth}><Station /></Protected>} />
-            
+                <Route
+                    path="/station"
+                    element={<Protected isAuth={isAuth}><Station /></Protected>} />
+
             </Routes>
             <Outlet />
         </>

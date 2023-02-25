@@ -1,11 +1,11 @@
-const { sequelize, User } = require("./src/models");
+const { sequelize } = require("./src/models");
 const express = require("express");
 const app = express();
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const dotenv = require("dotenv").config({path: "./config/config.env",});
+const dotenv = require("dotenv").config({ path: "./config/config.env" });
 const port = process.env.PORT;
 
 //MIDDLEWARE
@@ -27,7 +27,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,//1 day
+      maxAge: 1000 * 60 * 60 * 24, //1 day
       secure: process.env.NODE_ENV === "production",
     },
   })
@@ -41,20 +41,18 @@ const Signup = require("./routes/signup");
 const Login = require("./routes/login");
 const Station = require("./routes/station");
 const Logout = require("./routes/logout");
+const UserAPI = require("./api/User");
+const Home = require("./routes");
 
 //CHECKER/AUTHENTICATORS
-const isAuth = require("./auth/isAuth")
+const useAuth = require("./auth/useAuth");
 //ROUTES HANDLERS
-app.get("/", (req, res) => {
-  res.send(req.session);
-});
+app.get("/", Home);
 app.use("/login", Login);
 app.use("/logout", Logout);
 app.use("/signup", Signup);
-app.use("/station", isAuth, Station);
-
-//USER ROUTE
-app.use("/user", User);
+app.use("/user", useAuth, UserAPI);
+app.use("/station", useAuth, Station);
 
 //404 HANDLER
 app.use((req, res, next) => {

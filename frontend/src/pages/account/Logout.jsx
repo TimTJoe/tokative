@@ -16,9 +16,9 @@ function Logout() {
                 console.log(res)
                 const tokative_sid = "tokative_sid"
                 document.cookie = tokative_sid + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-                // localStorage.clear()
+                localStorage.clear()
                 location.state = null
-                navigate('/')
+                navigate('/login')
             })
             .catch(err => {
                 console.log(err)
