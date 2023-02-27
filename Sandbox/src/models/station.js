@@ -1,10 +1,10 @@
 "use strict";
-const { Model, UUIDV4 } = require("sequelize");
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Station extends Model {
     static associate({User}) {
       // define association here
-      this.belongsTo(User, { foreignKey: "user_id" });
+      this.belongsTo(User, { foreignKey: "user_uuid" });
     }
   }
   Station.init(
@@ -13,23 +13,27 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
+      user_uuid: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       frequency: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
         allowNull: false,
         unique: {
           args: true,
           msg: "Frequency is taken.",
         },
+        isDecimal: {
+          args: true,
+          msg: "Unaccepted frequency. Please try again.",
+        },
       },
-      bio: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      owner: {
+      about: {
         type: DataTypes.STRING,
         allowNull: false,
       },

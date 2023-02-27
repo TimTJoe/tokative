@@ -1,10 +1,19 @@
 const express = require("express");
-const { where } = require("sequelize");
 const router = express.Router();
-const { sequelize, User } = require("../src/models");
 
-router.get("/", (req, res) => {
-  res.send(req.user);
-});
+//HANDLERS
+const CreateUser = require("./user/CreateUser");
+const GetUser = require("./user/GetUser");
+const UpdateUser = require("./user/UpdateUser");
+const DeleteUser = require("./user/DeleteUser");
+
+//CREATE
+router.post("/", CreateUser);
+//READ
+router.get("/", GetUser);
+//UPDATE
+router.put("/", UpdateUser);
+//DELETE
+router.delete("/", DeleteUser);
 
 module.exports = router;

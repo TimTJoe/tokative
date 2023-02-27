@@ -5,7 +5,7 @@ const Button = styled(muiButton)`
     && {
         padding: 10px;
         font-size: 1rem;
-        border-radius: 9px;
+        border-radius: 18px;
         text-transform: capitalize;
         font-weight: bolder;
         transition: transform .1s ease-out;

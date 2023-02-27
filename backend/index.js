@@ -1,4 +1,4 @@
-const { sequelize } = require("./src/models");
+const { sequelize } = require("./db/models");
 const express = require("express");
 const app = express();
 const passport = require("passport");
@@ -36,35 +36,30 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport")(passport);
 
-//ROUTES
-const Signup = require("./routes/signup");
-const Login = require("./routes/login");
-const Station = require("./routes/station");
-const Logout = require("./routes/logout");
-const UserAPI = require("./api/User");
-const Home = require("./routes");
+//HOOKS
+const useAuth = require("./hooks/useAuth");
 
-//CHECKER/AUTHENTICATORS
-const useAuth = require("./auth/useAuth");
-//ROUTES HANDLERS
+//ROUTES
+const NotFound = require("./middlewares/NotFound")
+const Error = require("./middlewares/Error")
+const Home = require("./routes");
+const Login = require("./auth/login");
+const Logout = require("./auth/logout");
+const User = require("./api/User");
+const Station = require("./api/Station");
+
+// const Signup = require("./routes/signup");
+// app.use("/signup", Signup);
+//ROUTES MIDDLEWARE HANDLERS (CRUD MIDDLEWARE)
 app.get("/", Home);
 app.use("/login", Login);
-app.use("/logout", Logout);
-app.use("/signup", Signup);
-app.use("/user", useAuth, UserAPI);
+app.use("/logout", useAuth, Logout);
+app.use("/user", useAuth, User);
 app.use("/station", useAuth, Station);
 
-//404 HANDLER
-app.use((req, res, next) => {
-  const err = new Error("Not Found");
-  err.status = 404;
-  next(err);
-});
-//ERROR HANDLER
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.send(err.message);
-});
+//404 & Router Error Handlers
+app.use(NotFound)
+app.use(Error)
 
 //START SERVER & CONNECT TO DB
 app.listen({ port: port }, async () => {

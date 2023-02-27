@@ -23,7 +23,7 @@ import Select from '@components/form/Select';
 import NavBar from '../components/NavBar';
 
 
-const SIGNUP_URI = "http://localhost:8020/signup/"
+const SIGNUP_URI = "http://localhost:8020/user"
 
 const genders = [
     {

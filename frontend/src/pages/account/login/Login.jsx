@@ -93,7 +93,6 @@ export default function Login() {
                     <Box>
                         <Sheet>
                             {loading && <LinearProgress />}
-                            {statusCode && statusCode}
 
                             <Header
                                 headline="Welcome!"

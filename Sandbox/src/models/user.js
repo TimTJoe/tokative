@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate({ Station }) {
       // define association here
-      this.hasOne(Station, { foreignKey: "user_id" }, { onDelete: "CASCADE" });
+      this.hasOne(Station, { foreignKey: "user_uuid" }, { onDelete: "CASCADE" });
     }
     //hide values we don't want to be shown
     toJSON() {

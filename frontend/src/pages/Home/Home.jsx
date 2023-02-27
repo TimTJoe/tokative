@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import withAuth from '@contexts/withAuth'
 import useData from "@hooks/useData"
-import useLogout from '@hooks/useLogout'
+// import useLogout from '@hooks/useLogout'
 
-import Logout from "@pages/account/Logout"
+import useLogout from "@pages/account/Logout"
 
 function Home() {
     const location = useLocation()
@@ -19,7 +19,6 @@ function Home() {
             {
                 isAuth ? (<small> {user.fullname} | </small> )
                     : (<Link to={"/login"}> log in | </Link>)
-
             }
             <Link to="/signup"> Signup </Link> |
             <Link to="/station"> Station</Link> |

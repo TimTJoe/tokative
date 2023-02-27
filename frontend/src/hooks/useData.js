@@ -1,7 +1,7 @@
 import React, {useState, useEffect, createContext} from "react"
 import axios from "axios"
 import {useLocation} from "react-router-dom"
-const DATA_URL = "http://localhost:8020/user/"
+const DATA_URL = "http://localhost:8020/user"
 
 /**
  * Use logged in user data
@@ -20,13 +20,14 @@ const useData = () => {
         if (loggedInUser) {
             const foundUser = JSON.parse(loggedInUser)
             setData(foundUser)
+        } else {
+            //fetch user from db
+            const fetchData = async () => {
+                const result = await axios.get(DATA_URL)
+                setData(result.data)
+            }
+            fetchData()
         }
-        //fetch user from db
-        const fetchData = async () => {
-            const result = await axios.get(DATA_URL)
-            setData(result.data)
-        }
-        fetchData()
     }, [location])
     return data
 }

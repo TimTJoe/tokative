@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "superuser",
+    "database": "tokative_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "superuser",
+    "database": "tokative",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

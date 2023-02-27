@@ -1,4 +1,4 @@
-const { sequelize, User } = require("../src/models");
+const { sequelize, User } = require("../db/models");
 const bcrypt = require("bcryptjs");
 const localStrategy = require("passport-local");
 

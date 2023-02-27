@@ -1,14 +1,14 @@
 import React from 'react'
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const Protected = ({ isAuth, children, ...rest }) => {
-
+    // const navigate = useNavigate()
     if (!isAuth) {
-        return <Navigate to="/login" replace />
+        // navigate("/login")
+        return <Navigate to={"/login"} replace />
     } else {
         return children
     }
-
 };
 
 export default Protected;

@@ -61,7 +61,7 @@ const Pattern = {
     },
   },
 
-  bio: {
+  about: {
     // required: "Please add a description",
   },
 
