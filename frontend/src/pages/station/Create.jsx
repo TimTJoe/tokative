@@ -21,6 +21,7 @@ import { ProvideUser } from '@contexts/withUser';
 import withAuth from '@contexts/withAuth';
 import useData from '@hooks/useData';
 import Flexbox from "@components/Flexbox";
+import { createBrowserHistory } from "history";
 
 const STATION_URI = "http://localhost:8020/station";
 
@@ -34,11 +35,13 @@ function Create() {
     about: "",
   })
   const location = useLocation()
+  const history = createBrowserHistory()
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const [slideIn, setSlideIn] = useState(false)
   const slideRef = useRef(null)
   const navigate = useNavigate()
+
   // console.log({ user, values })
 
   function handleOnFocus() {
@@ -72,7 +75,7 @@ function Create() {
           name: data.name
         }
       }
-      navigate(`/${station.frequency}`, { state: { station } })
+      navigate(`/${station.frequency}`, { state: { station: station } })
     } catch (error) {
       setDisable(false)
       setLoading(false)
@@ -142,7 +145,7 @@ function Create() {
             <Button
               variant='outlined'
               disableElevation
-            // onClick={() => {location.back()}}
+            onClick={() => {history.back()}}
             // disabled={disable}
             > Cancel </Button>
 

@@ -3,11 +3,9 @@ const router = express.Router();
 
 //HANDLERS
 const CreateStation = require("./station/CreateStation")
+const GetStation = require("./station/GetStation")
 
-router.get("/", (req, res) => {
-  res.send("Hello World. It works!");
-});
-
+router.get("/", GetStation);
 router.post("/", CreateStation)
 
 module.exports = router;

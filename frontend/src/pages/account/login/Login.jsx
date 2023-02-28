@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useForm } from "react-hook-form"
 import { Link, Typography, Divider, Slide, Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
-import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 import styled from 'styled-components';
@@ -70,8 +69,8 @@ export default function Login() {
             if (isAuth) {
                 //set user in local storage
                 localStorage.setItem("user", JSON.stringify(user))
-                //goto home/what user came from
-                navigate("/", { state: { profile: user} })
+                //goto home/where user came from
+                navigate(-1)
             } else {
                 throw {
                     errors: data
