@@ -9,7 +9,7 @@ const GetStation = async (req, res, next) => {
    * send the station
    */
   try {
-    user_uuid = req.user.uuid;
+      const user_uuid = req.params.uuid;
     const station = await Station.findOne({ where: { user_uuid } });
     if (!station) {
       throw {
@@ -17,6 +17,7 @@ const GetStation = async (req, res, next) => {
         message: "User does not have a station",
       };
     }
+    console.log(station)
     res.send(station);
   } catch (error) {
     res.send(error);

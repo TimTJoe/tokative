@@ -19,20 +19,11 @@ const GetUser = async (req, res, next) => {
         message: "User not found"
       }
     }
-    const station = await Station.findOne({ where: { user_uuid: uuid } });
-    if (!station) {
-      throw {
-        success: false,
-        message: "User does not have a station"
-      }
-    }
     res.send({
       success: true,
       user,
-      station
     })
-    console.log(user, station)
-    
+    // console.log(user, station)
   } catch (error) {
     res.send(error)
   }

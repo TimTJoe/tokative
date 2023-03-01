@@ -67,7 +67,7 @@ function Create() {
     try {
       const response = await axios.post(STATION_URI, values);
       const data = response.data;
-      console.log(data)
+      console.log(response)
       const { success, station } = data;
       if (!success) {
         throw {

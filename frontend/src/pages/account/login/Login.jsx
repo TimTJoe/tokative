@@ -70,7 +70,7 @@ export default function Login() {
                 //set user in local storage
                 localStorage.setItem("user", JSON.stringify(user))
                 //goto home/where user came from
-                navigate(-1)
+                navigate("/")
             } else {
                 throw {
                     errors: data
