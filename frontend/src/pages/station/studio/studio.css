@@ -2,14 +2,7 @@
 
 /* ripple */
 .ripple {
-    /* height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    background-color: #ff4343;
-    top: 50%;
-    left: 50%; */
-    /* transform: translate(-50%, -50%); */
-    position: fixed;
+    position: relative;
 }
 
 .ripple:before,
@@ -21,20 +14,20 @@
     right: 0;
     bottom: 0;
     left: 0;
-    border: 1px solid #ff4343;
+    border: 1px solid #f44336;
     border-radius: 50%;
 }
 
 
 .ripple:before {
-    animation: ripple 2s linear infinite;
+    animation: effect 1s linear infinite;
 }
 
 .ripple:after {
-    animation: ripple 2s linear 1s infinite;
+    animation: effect 1s linear 1s infinite;
 }
 
-@keyframes ripple {
+@keyframes effect {
     0% {
         transform: scale(1);
     }

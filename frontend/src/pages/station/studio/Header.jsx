@@ -1,7 +1,9 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+import Button from './Button'
+import { Stop, PlayArrow } from '@mui/icons-material'
 
 const Container = styled(Box)`
     && {
@@ -58,6 +60,13 @@ function Header() {
                 <LargeText>{station.name} &bull; {station.frequency}</LargeText>
                 <SmallText>0 listeners </SmallText>
             </Textbox>
+            <Tooltip title={start ? "Stop Broadcast" : "Start Broadcast"}>
+                <Button onClick={handleStart}
+                    color={start ? "error" : "primary"}
+                    className={start ? 'ripple' : ""}>
+                    {start ? <Stop /> : <PlayArrow />}
+                </Button>
+            </Tooltip>
         </Container>
     )
 }

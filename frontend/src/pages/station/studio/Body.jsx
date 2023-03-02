@@ -7,7 +7,7 @@ const Container = styled(Box)`
         border-radius: 12px;
         margin: 12px;
         background-color: #D9D9D9;
-        min-height: 250px;
+        min-height: 150px;
         padding: 6px;
 
     }

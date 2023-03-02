@@ -47,21 +47,21 @@ const Login = require("./auth/login");
 const Logout = require("./auth/logout");
 const User = require("./api/User");
 const Station = require("./api/Station");
+const Studio = require("./api/Studio");
 
-// const Signup = require("./routes/signup");
-// app.use("/signup", Signup);
 //ROUTES MIDDLEWARE HANDLERS (CRUD MIDDLEWARE)
 app.get("/", Home);
 app.use("/login", Login);
 app.use("/logout", useAuth, Logout);
 app.use("/user", useAuth, User);
 app.use("/station", useAuth, Station);
+app.use("/studio", useAuth, Studio);
 
 //404 & Router Error Handlers
 app.use(NotFound)
 app.use(Error)
 
-//START SERVER & CONNECT TO DB
+//START SERVER & CONNECT TO PostgreSQL DB
 app.listen({ port: port }, async () => {
   console.log(`Client up on http://localhost:${port}`);
   await sequelize.authenticate();

@@ -5,8 +5,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import useData from "@hooks/useData"
 import useRole from "@hooks/useRole"
 import styled from 'styled-components'
-import { Box, Button } from '@mui/material'
-import { Stop, PlayArrow } from '@mui/icons-material'
+import { Box } from '@mui/material'
 import Header from "./studio/Header"
 import "./studio/Studio.css"
 import Body from './studio/Body'
@@ -40,9 +39,7 @@ function Studio() {
     <Container>
       <Header />
       <Body />
-      <Button onClick={handleStart} className={ start ? 'ripple' : null}>
-        {start ? <Stop /> : <PlayArrow />}
-      </Button>
+      
     </Container>
   )
 }
