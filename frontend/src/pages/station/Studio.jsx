@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import useStation from '@hooks/useStation'
 import useTitle from '@hooks/useTitle'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
@@ -9,6 +9,19 @@ import { Box } from '@mui/material'
 import Header from "./studio/Header"
 import "./studio/Studio.css"
 import Body from './studio/Body'
+import axios from "axios"
+import { ProvideBroadcast } from '@contexts/withBroadcast'
+import io from 'socket.io-client'
+//create a new distinct websocket connection
+const socket = io.connect('http://localhost:8020', { path: "/studio", })
+import { ReactMic } from 'react-mic';
+import useRoom from "@hooks/useRoom"
+import Peer from "simple-peer"
+
+// const myPeer = new Peer(undefined, {
+//   host: "/",
+//   port: "8019"
+// })
 
 const Container = styled(Box)`
     && {
@@ -21,26 +34,62 @@ const Container = styled(Box)`
         border-radius: 12px;
     }
 `
+const audio = new Audio()
 
 function Studio() {
+  // const room = useRoom()
+  const station = useLocation().state.station
+  useTitle(`Studio - ${station?.name}`)
   const frequency = useParams().frequency
   const [start, setStart] = useState(false)
-  const handleStart = () => {
-    setStart(!start)
-  }
-    // const station = useStation()
-    const user = useData()
-    const station = useLocation().state.station
-    const role = useRole()
-  useTitle(`Studio - ${station?.name}`)
-  
+  const [record, setRecord] = useState(false)
+  const [playing, setPlaying] = useState("")
+  const [room, setRoom] = useState("")
+  const location = useLocation()
+  const user = useData()
+  const role = useRole()
+
+  const handleStart = () => { setStart(!start) }
+  const handlePlay = (src) => { audio.play() }
+  const handleRecord = () => { setRecord(!record) }
+  const onData = (blob) => { console.log('Real-time data: ', blob); }
+  const onStop = (blob) => { console.log('recorded blob is: ', blob); }
+
+
+  const peer = new Peer({
+    initiator: false,
+    trickle: false,
+    stream
+  });
+
+  // peer.on('signal', data => {
+  //   console.log("signal sent")
+  // })
+
+  useEffect(() => {
+    setRoom(frequency)
+    socket.emit('join_room', { roomId: frequency, signal: data })
+    return () => { }
+  }, [location])
+
 
   return (
-    <Container>
-      <Header />
-      <Body />
-      
-    </Container>
+    <ProvideBroadcast>
+      <Container>
+        You are in Room {room} as {role}
+        <Header />
+        <Body />
+        {/* <ReactMic
+        record={record}
+        onStop={onStop}
+        onData={onData}
+        strokeColor="#000"
+        backgroundColor="#ff4081"
+        /> */}
+
+      </Container>
+
+    </ProvideBroadcast>
   )
 }
 

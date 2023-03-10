@@ -4,10 +4,12 @@ const bcrypt = require("bcryptjs");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate({ Station }) {
+    static associate({ Station, Show }) {
       // define association here
-      this.hasOne(Station, { foreignKey: "user_uuid", keyType: DataTypes.UUIDV4 }, { onDelete: "CASCADE" });
+      this.hasOne(Station, { foreignKey: "user_uuid" }, { onDelete: "CASCADE" });
+      this.hasMany(Show, { foreignKey: "user_uuid" }, { onDelete: "CASCADE" });
     }
+
     //hide values we don't want to be shown
     toJSON() {
       return {

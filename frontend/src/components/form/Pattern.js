@@ -14,6 +14,13 @@ const Pattern = {
       message: "Too many characters in name.",
     },
   },
+  name: {
+    required: "Show name is required.",
+    minLength: {
+      value: 4,
+      message: "Show name must be 4+ characters.",
+    },
+  },
   station: {
     required: "Station name is required.",
     minLength: {

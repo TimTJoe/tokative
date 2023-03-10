@@ -1,3 +1,4 @@
+import "./config/init"
 import React, { useState, useContext } from 'react'
 import { Routes, Outlet, Route } from "react-router-dom"
 import Home from '@pages/Home'
@@ -7,12 +8,16 @@ import axios from 'axios'
 import withAuth from '@contexts/withAuth'
 import Studio from '@pages/station/Studio'
 import CreateStation from '@pages/station/Create'
+import CreateShow from '@pages/show/Create'
 import Protected from "@components/Protected";
-
 axios.defaults.withCredentials = true;
+// import io from "socket.io-client"
+// const socket = io.connect("http://localhost:8020")
+
 
 function App() {
     const { isAuth } = useContext(withAuth)
+
 
     return (
         <>
@@ -25,7 +30,11 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="new">
                     <Route path="station" 
-                    element={<Protected isAuth={isAuth}><CreateStation/></Protected>}/>
+                        element={<Protected isAuth={isAuth}>
+                            <CreateStation /></Protected>} />
+                    <Route path="show" 
+                        element={<Protected isAuth={isAuth}>
+                            <CreateShow /></Protected>} />
                 </Route>
             </Routes>
             <Outlet />

@@ -5,19 +5,14 @@ import withAuth from '@contexts/withAuth'
 import useData from "@hooks/useData"
 import useStation from "@hooks/useStation"
 import getStations from "@helpers/getStations"
-
-// import useLogout from '@hooks/useLogout'
-
 import useLogout from "@pages/account/Logout"
 
 function Home() {
     const location = useLocation()
     const { isAuth } = useContext(withAuth)
     const user = useData();
-    // const station = useStation()
     const AllStations = getStations()
     const handleLogout = useLogout()
-    // const sname = station ? station.station.name : "No station"
 
     return (
 
@@ -27,6 +22,7 @@ function Home() {
                     <p>
                         {user.fullname} <br />
                         <Link to="/new/station"> New Station</Link> <br />
+                        <Link to="/new/show"> New Show</Link> <br />
                         <Link onClick={handleLogout} to="/logout"> Logout </Link>
                     </p>
                     :
@@ -51,7 +47,7 @@ function Home() {
                     </p>
             }
 
-            {console.log(JSON.stringify({ user, isAuth, AllStations }),)}
+            {console.log(JSON.stringify({ user, AllStations }),)}
         </div>
     )
 }
