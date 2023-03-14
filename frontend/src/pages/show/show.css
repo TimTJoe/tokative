@@ -1,0 +1,37 @@
+    AniBreath {
+      animation: breathe 17400ms infinite
+    }
+    
+    @keyframes breathe {
+      0%: {
+        transform: scale(.5)
+        backgroundColor: #71A1C9
+      }
+      24.9%: {
+        backgroundColor: #71A1C9
+      }
+      25%: {
+        transform: scale(1)
+      }
+      25.1%: {
+        backgroundColor: #FF9833
+      }
+      50%: {
+        transform: scale(1)
+        backgroundColor: #FF9833
+      }
+      50.1%: {
+        backgroundColor: #000000
+      }
+      75%: {
+        transform: scale(.5)
+        backgroundColor: #000000
+      }
+      75.1%: {
+        backgroundColor: #FF9833
+      }
+      100%: {
+        transform: scale(.5)
+        backgroundColor: #FF9833
+      }
+    }

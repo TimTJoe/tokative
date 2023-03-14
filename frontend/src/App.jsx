@@ -1,31 +1,46 @@
+import "./config/init"
 import React, { useState, useContext } from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Outlet, Route } from "react-router-dom"
-import Index from '@pages/Home'
+import { Routes, Outlet, Route } from "react-router-dom"
+import Home from '@pages/Home'
 import Signup from '@pages/account/signup'
 import Login from '@pages/account/login'
-import Station from '@pages/station'
-import Protected from '@components/Protected'
 import axios from 'axios'
-import UserContext from '@contexts/UserDetails'
+import withAuth from '@contexts/withAuth'
+import Studio from '@pages/station/Studio'
+import CreateStation from '@pages/station/Create'
+import CreateShow from '@pages/show/Create'
+import Show from '@pages/show'
+import Protected from "@components/Protected";
 axios.defaults.withCredentials = true;
+// import io from "socket.io-client"
+// const socket = io.connect("http://localhost:8020")
+
 
 function App() {
-    // const [isAuth, setIsAuth] = useState(false)
-    // const [user, setUser] = useState(null)
-    const { isAuth, profile } = useContext(UserContext)
+    const { isAuth } = useContext(withAuth)
 
     return (
         <>
             <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/new/station" element={
-                    <Protected isAuth={isAuth}>
-                        <Station />
-                    </Protected>
-                } />
+                <Route path="/" element={<Home />}/>
+                <Route path="signup" element={<Signup />} />
+                <Route path="login" element={<Login />} />
+                <Route path="/:QueryString" element={<Show />} />
+                
+                <Route path="radio/:frequency" element={
+                <Protected isAuth={isAuth}><Studio /></Protected>} />
+                
+                <Route path="new">
+                    <Route 
+                    path="station" 
+                    element={<Protected 
+                    isAuth={isAuth}><CreateStation /></Protected>} />
+                    <Route 
+                    path="show" 
+                    element={<Protected 
+                    isAuth={isAuth}><CreateShow /></Protected>} />
+                </Route>
+                
             </Routes>
             <Outlet />
         </>
