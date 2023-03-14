@@ -1,54 +1,72 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from "react-router-dom"
 import withAuth from '@contexts/withAuth'
-import useData from "@hooks/useData"
-import useStation from "@hooks/useStation"
+import useUser from "@hooks/useUser"
 import getStations from "@helpers/getStations"
+import getShows from "@helpers/getShows"
 import useLogout from "@pages/account/Logout"
+import styled from "styled-components"
+import Navigation from '@components/navigation'
+import MuiContainer from '@mui/material/Container'
+import CreateShow from './components/CreateShow'
+import ShowCard from './components/ShowCard'
+
+const Main = styled.div`
+    && {
+        min-height: 99vh;
+        background-color: #F0F2F5;
+    }
+`
+
+const Container = styled(MuiContainer)`
+    && {
+        padding: 4px;
+    }
+`
+const ShowsGrid = styled.div`
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+`
 
 function Home() {
+    
     const location = useLocation()
     const { isAuth } = useContext(withAuth)
-    const user = useData();
+    const user = useUser();
     const AllStations = getStations()
+    const AllShows = getShows()
     const handleLogout = useLogout()
+    const navigate = useNavigate()
 
     return (
-
-        <div style={{ textAlign: 'center' }}>
-            {
-                user.uuid ?
-                    <p>
-                        {user.fullname} <br />
-                        <Link to="/new/station"> New Station</Link> <br />
-                        <Link to="/new/show"> New Show</Link> <br />
-                        <Link onClick={handleLogout} to="/logout"> Logout </Link>
-                    </p>
-                    :
-                    <p>
-                        <Link to={"/login"}> Log In  </Link> <br />
-                        <Link to="/signup"> Signup </Link>
-                    </p>
-            }
-            {
-                AllStations ?
-                    <small> Station list <br/>
-                        {AllStations.map((item, key) => (
-                            <Link 
-                            to={`/${item.frequency}`} key={key} 
-                            state={{station: item}}> {item.name}<br/>
-                            </Link>
-                        ))}
-                    </small>
-                    :
-                    <p>
-                        No Station exist.
-                    </p>
-            }
-
-            {console.log(JSON.stringify({ user, AllStations }),)}
-        </div>
+        <Main>
+            <Navigation />
+            <Container maxWidth="sm" disableGutters>
+                <CreateShow />
+                <ShowsGrid>
+                    {
+                        AllShows ? 
+                            AllShows.map((show, key) => (
+                                <ShowCard
+                                    name={show.name}
+                                    user_uuid={show.user_uuid}
+                                    avatar={show.avatar}
+                                    about={show.about}
+                                    token={show.token}
+                                    key={key}
+                                    onClick={()=> {
+                                        navigate(`/show?r=${show.token}`)
+                                    }}
+                                />
+                        )) : "No Show..."
+                    }
+                </ShowsGrid>
+            </Container>
+        </Main>
     )
 }
 

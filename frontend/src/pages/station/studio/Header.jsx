@@ -58,7 +58,7 @@ const Video = styled.video`
 `
 
 function Header(props) {
-    const station = useLocation().state.station
+    const station = useLocation().state?.station
     const [ripple, setRipple] = useState(false)
     const { room } = useContext(withBroadcast)
     // console.log(room)
@@ -67,7 +67,7 @@ function Header(props) {
             <Container>
                 <Icon src="https://i.imgur.com/4Z5YQ2x.png" />
                 <Textbox>
-                    <LargeText>{station.name} &bull; {station.frequency}</LargeText>
+                    <LargeText>{station?.name} &bull; {station?.frequency}</LargeText>
                     <SmallText> 0 listeners </SmallText>
                 </Textbox>
                 <Tooltip title={ ripple ? "Stop Broadcast" : "Start Broadcast"}>

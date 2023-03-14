@@ -17,12 +17,6 @@ const socket = io.connect('http://localhost:8020', { path: "/studio", })
 import { ReactMic } from 'react-mic';
 import useRoom from "@hooks/useRoom"
 import Peer from "simple-peer"
-
-// const myPeer = new Peer(undefined, {
-//   host: "/",
-//   port: "8019"
-// })
-
 const Container = styled(Box)`
     && {
         padding: 12px;
@@ -38,7 +32,8 @@ const audio = new Audio()
 
 function Studio() {
   // const room = useRoom()
-  const station = useLocation().state.station
+  //TODO: SOLVE STATION ISSUES
+  const station = useLocation().state?.station || ""
   useTitle(`Studio - ${station?.name}`)
   const frequency = useParams().frequency
   const [start, setStart] = useState(false)
@@ -55,20 +50,9 @@ function Studio() {
   const onData = (blob) => { console.log('Real-time data: ', blob); }
   const onStop = (blob) => { console.log('recorded blob is: ', blob); }
 
-
-  const peer = new Peer({
-    initiator: false,
-    trickle: false,
-    stream
-  });
-
-  // peer.on('signal', data => {
-  //   console.log("signal sent")
-  // })
-
   useEffect(() => {
     setRoom(frequency)
-    socket.emit('join_room', { roomId: frequency, signal: data })
+    socket.emit('join_room', { roomId: frequency, signal: "data"})
     return () => { }
   }, [location])
 

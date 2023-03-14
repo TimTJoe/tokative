@@ -68,7 +68,7 @@ export default function Login() {
             const { isAuth, user } = data;
             if (isAuth) {
                 //set user in local storage
-                localStorage.setItem("user", JSON.stringify(user))
+                // localStorage.setItem("user", JSON.stringify(user))
                 //goto home/where user came from
                 navigate("/")
             } else {

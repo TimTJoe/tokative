@@ -4,6 +4,7 @@ const router = express.Router();
 //HANDLERS
 const CreateUser = require("./user/CreateUser");
 const GetUser = require("./user/GetUser");
+const GetByUUID = require("./user/GetByUUID");
 const UpdateUser = require("./user/UpdateUser");
 const DeleteUser = require("./user/DeleteUser");
 
@@ -11,6 +12,7 @@ const DeleteUser = require("./user/DeleteUser");
 router.post("/", CreateUser);
 //READ
 router.get("/", GetUser);
+router.get("/:uuid", GetByUUID);
 //UPDATE
 router.put("/", UpdateUser);
 //DELETE

@@ -11,23 +11,23 @@ module.exports = {
       },
       uuid: {
         type: Sequelize.UUID,
-        allowNull: false
+        defaultValue: Sequelize.UUIDV4,
       },
       user_uuid: {
         type: Sequelize.UUID,
-        allowNull: false
+        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       about: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       token: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
 
       createdAt: {

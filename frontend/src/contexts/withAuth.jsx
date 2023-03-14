@@ -1,21 +1,22 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import useData from "@hooks/useData"
+import useUser from "@hooks/useUser"
 
 const withAuth = createContext(null)
 
 export function ProvideAuth({ children }) {
-    const location = useLocation()
     const [isAuth, setIsAuth] = useState(false)
-    const data = useData();
+    const location = useLocation()
+    const user = useUser();
 
     useEffect(() => {
-        if (data.uuid) {
+        //if user has uuid means he's logged in
+        if (user.uuid) {
             setIsAuth(true)
         } else {
             setIsAuth(false)
         }
-    }, [location, data])
+    }, [location, user])
 
     const VALUES = { isAuth, setIsAuth }
 

@@ -4,11 +4,17 @@ const { v4: uuidv4 } = require("uuid");
 const io = require("socket.io");
 
 const CreateShow = require("./show/CreateShow");
+const GetShow = require("./show/GetShow");
+const AllShows = require("./show/AllShows");
+const GetShowHost = require("./show/GetShowHost");
 
-router.get("/", (req, res, next) => {
-    res.send("Shows loading...")
-});
+//GET REQUEST HANDLERS
+router.get("/", AllShows);
+router.get("/:token", GetShow);
+router.get("/host/:uuid", GetShowHost);
 
+
+//POST REQUEST HANDLERS
 router.post("/", CreateShow);
 
 module.exports = router;

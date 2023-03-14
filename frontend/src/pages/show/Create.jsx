@@ -7,7 +7,7 @@ import useTitle from "@hooks/useTitle"
 import { useNavigate, useLocation } from "react-router-dom"
 import axios from 'axios';
 import styled from 'styled-components';
-// import { ArrowForward } from "@mui/icons-material"
+import { ArrowForward } from "@mui/icons-material"
 
 import Body from "@components/form/Body"
 import FormBox from "@components/form/FormBox"
@@ -24,6 +24,18 @@ import Flexbox from "@components/Flexbox";
 import { createBrowserHistory } from "history";
 
 const DATA_URL = "http://localhost:8020/show";
+const Counter = styled.span`
+  width: 25px;
+  height: 25px;
+  color: #7B7B7B;
+  font: inherit;
+  font-size: .8rem;
+  border-radius: 14px/14px;
+  background-color: #D9D9D9;
+  padding: 2px 4px;
+  font-weight: bold;
+
+`
 
 function Create() {
   useTitle("Tokative - Create a New Talk Show")
@@ -36,6 +48,7 @@ function Create() {
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const navigate = useNavigate()
+  const [length, setLength] = useState("")
 
   function handleOnFocus() {
     setDisable(false)
@@ -47,6 +60,7 @@ function Create() {
 
   function handleChange(e) {
     setValues({ ...values, [e.target.name]: e.target.value })
+    setLength(e.target.length)
   }
 
   const handleCreation = async () => {
@@ -54,10 +68,11 @@ function Create() {
     setLoading(true)
     try {
       const response = await axios.post(DATA_URL, values);
-      const data = response.data;
-      const { show } = data;
-      console.log(data)
-      // navigate(`/show?r=${show.token}`, { state: { show: show } })
+      const show = response.data
+      if (show.uuid) {
+        navigate(`/show?r=${show.token}`)
+      }
+      
     } catch (error) {
       setDisable(false)
       setLoading(false)
@@ -93,7 +108,7 @@ function Create() {
           />
           
           <Textarea
-            label="Description"
+            label={`Description ${length}/280`}
             name="about"
             type="text"
             value={values.about}
@@ -105,14 +120,14 @@ function Create() {
             InputLabelProps={{ shrink: true }}
             fullWidth
             multiline
+            inputProps={{ maxLength: 280 }}
           />
-
+          { length && (<Counter>{length} / 280</Counter>) }
           <Flexbox>
             <Button
               variant='outlined'
               disableElevation
               onClick={() => { history.back() }}
-            // disabled={disable}
             > Cancel </Button>
 
             <Button
@@ -121,7 +136,7 @@ function Create() {
               variant='contained'
               disableElevation
               disabled={disable}
-            // endIcon={<ArrowForward />}
+            endIcon={<ArrowForward />}
             > Continue </Button>
           </Flexbox>
         </FormBox>
