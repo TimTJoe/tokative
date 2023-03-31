@@ -20,6 +20,10 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src/utils"),
       },
       {
+        find: "@helpers",
+        replacement: path.resolve(__dirname, "src/helpers"),
+      },
+      {
         find: "@hooks",
         replacement: path.resolve(__dirname, "src/hooks"),
       },
@@ -34,6 +38,10 @@ export default defineConfig({
       {
         find: "@contexts",
         replacement: path.resolve(__dirname, "src/contexts"),
+      },
+      {
+        find: "@config",
+        replacement: path.resolve(__dirname, "src/config"),
       },
     ],
   },

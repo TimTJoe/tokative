@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useForm } from "react-hook-form"
 import { Link, Typography, Divider, Slide, Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
-import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 import styled from 'styled-components';
@@ -65,11 +64,13 @@ export default function Login() {
         setLoading(true)
         try {
             const response = await axios.post(LOGIN_URI, values);
-            console.log(response)
-            const data = response.data;
+            const data = response.data
             const { isAuth, user } = data;
             if (isAuth) {
-                navigate("/", { state: { user } })
+                //set user in local storage
+                // localStorage.setItem("user", JSON.stringify(user))
+                //goto home/where user came from
+                navigate("/")
             } else {
                 throw {
                     errors: data
@@ -91,7 +92,6 @@ export default function Login() {
                     <Box>
                         <Sheet>
                             {loading && <LinearProgress />}
-                            {statusCode && statusCode}
 
                             <Header
                                 headline="Welcome!"

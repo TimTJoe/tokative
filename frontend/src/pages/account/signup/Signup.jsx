@@ -8,6 +8,7 @@ import axios from "axios"
 axios.defaults.withCredentials = false;
 import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from '@hooks/useTitle';
+import useData from '@hooks/useData';
 
 import Sheet from '@components/form/Sheet';
 import Header from '@components/form/Header';
@@ -22,7 +23,7 @@ import Select from '@components/form/Select';
 import NavBar from '../components/NavBar';
 
 
-const SIGNUP_URI = "http://localhost:8020/signup/"
+const SIGNUP_URI = "http://localhost:8020/user"
 
 const genders = [
     {
@@ -78,7 +79,7 @@ export default function Signup() {
             if (success) {
                 setDisable(false)
                 setLoading(false)
-                navigate("/", { state: { user } })
+                navigate("/login",{state: {user}} )
             } else {
                 throw {
                     errors: data

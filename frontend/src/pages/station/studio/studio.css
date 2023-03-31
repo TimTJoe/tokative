@@ -1,0 +1,44 @@
+
+
+/* ripple */
+.ripple {
+    position: relative;
+}
+
+.ripple:before,
+.ripple:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px solid #f44336;
+    border-radius: 50%;
+}
+
+
+.ripple:before {
+    animation: effect 1s linear infinite;
+}
+
+.ripple:after {
+    animation: effect 1s linear 1s infinite;
+}
+
+@keyframes effect {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}

@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useForm } from "react-hook-form"
 import { Link, Typography, Divider, Slide, Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { useLocation } from 'react-router-dom'
 import LinearProgress from '@mui/material/LinearProgress';
 import useTitle from "@hooks/useTitle"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import axios from 'axios';
 import styled from 'styled-components';
+// import { ArrowForward } from "@mui/icons-material"
 
 import Body from "@components/form/Body"
 import FormBox from "@components/form/FormBox"
@@ -17,34 +17,42 @@ import Button from "@components/form/Button"
 import Sheet from "@components/form/Sheet"
 import Pattern from '@components/form/Pattern';
 import Textarea from '@components/form/Textarea';
-
-import UserContext from '@contexts/UserDetails';
+import { ProvideUser } from '@contexts/withUser';
+import withAuth from '@contexts/withAuth';
+import useData from '@hooks/useData';
+import Flexbox from "@components/Flexbox";
+import { createBrowserHistory } from "history";
 
 const STATION_URI = "http://localhost:8020/station";
 
-function Station() {
+function Create() {
   useTitle("Tokative - Create a New Station")
+  const user = useData()
+  const { isAuth } = useContext(withAuth);
+  const [values, setValues] = useState({
+    station: "",
+    frequency: "",
+    about: "",
+  })
   const location = useLocation()
-  const {USER} = useContext(UserContext)
-  // const user = location.state?.user || null;
+  const history = createBrowserHistory()
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const [slideIn, setSlideIn] = useState(false)
   const slideRef = useRef(null)
   const navigate = useNavigate()
 
-  function handleOnFocus() { setDisable(false) }
+  // console.log({ user, values })
+
+  function handleOnFocus() {
+    setDisable(false)
+    setLoading(false)
+  }
 
   useEffect(() => {
     setSlideIn(true)
-  }, [])
+  }, [location])
 
-  const [values, setValues] = useState({
-    station:  "",
-    frequency: "",
-    bio: "",
-    owner: USER?.uuid || ""
-  })
 
   const { setError, register, handleSubmit, formState: { errors } } = useForm()
   const handleErrors = (errors) => { }
@@ -53,36 +61,33 @@ function Station() {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
-  const handleCreation = async () =>  {
+  const handleCreation = async () => {
     setDisable(true)
     setLoading(true)
     try {
       const response = await axios.post(STATION_URI, values);
       const data = response.data;
-      const {success, station} = data;
-      
-      if(!success) {
+      console.log(response)
+      const { success, station } = data;
+      if (!success) {
         throw {
           message: data.message,
           name: data.name
         }
       }
-
-      navigate("/", { state: { station }})
-
-    } catch(error) {
+      navigate(`/${station.frequency}`, { state: { station: station } })
+    } catch (error) {
       setDisable(false)
-    setLoading(false)
-      if(error.message) {
-        setError(error.name, {message: error.message})
-      }
+      setLoading(false)
+      setError(error.name, { message: error.message })
     }
-
   }
 
   return (
     <Body>
       <Sheet>
+        {loading && <LinearProgress />}
+
         <Header
           headline="Create a Station"
           tagline="Your own dedicated internet radio station" />
@@ -104,10 +109,11 @@ function Station() {
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
+          // required
           />
           <Input
             label="Frequency"
-            placeholder="107.9"
+            placeholder={"107.9"}
             name="frequency"
             type="text"
             value={values.frequency}
@@ -118,36 +124,44 @@ function Station() {
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
+          // required
           />
           <Textarea
             label="About Station"
-            placeholder={USER.uuid}
-            name="bio"
+            name="about"
             type="text"
-            value={values.bio}
+            value={values.about}
             onFocus={handleOnFocus}
-            {...register("bio", Pattern.bio)}
-            error={Boolean(errors.bio)}
-            helperText={errors.bio?.message}
+            {...register("about", Pattern.about)}
+            error={Boolean(errors.about)}
+            helperText={errors.about?.message}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
             multiline
           />
 
-          <Button
-            type="submit"
-            color="primary"
-            variant='contained'
-            disableElevation
-            disabled={disable}
-          > Create Station </Button>
+          <Flexbox>
+            <Button
+              variant='outlined'
+              disableElevation
+            onClick={() => {history.back()}}
+            // disabled={disable}
+            > Cancel </Button>
 
+            <Button
+              type="submit"
+              color="primary"
+              variant='contained'
+              disableElevation
+              disabled={disable}
+            // endIcon={<ArrowForward />}
+            > Continue </Button>
+          </Flexbox>
         </FormBox>
-
       </Sheet>
     </Body>
   )
 }
 
-export default Station
+export default Create
