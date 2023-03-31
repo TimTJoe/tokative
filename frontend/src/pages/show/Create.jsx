@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { ArrowForward } from "@mui/icons-material"
 
 import Body from "@components/form/Body"
+import Navigation from "@components/navigation"
 import FormBox from "@components/form/FormBox"
 import Header from "@components/form/Header"
 import Input from "@components/form/Input"
@@ -24,17 +25,9 @@ import Flexbox from "@components/Flexbox";
 import { createBrowserHistory } from "history";
 
 const DATA_URL = "http://localhost:8020/show";
-const Counter = styled.span`
-  width: 25px;
-  height: 25px;
-  color: #7B7B7B;
-  font: inherit;
-  font-size: .8rem;
-  border-radius: 14px/14px;
-  background-color: #D9D9D9;
-  padding: 2px 4px;
-  font-weight: bold;
 
+const Wrapper = styled.div`
+  margin-top: 24px;
 `
 
 function Create() {
@@ -48,7 +41,7 @@ function Create() {
   const [loading, setLoading] = useState(false)
   const [disable, setDisable] = useState(false)
   const navigate = useNavigate()
-  const [length, setLength] = useState("")
+  const [length, setLength] = useState(0)
 
   function handleOnFocus() {
     setDisable(false)
@@ -60,7 +53,7 @@ function Create() {
 
   function handleChange(e) {
     setValues({ ...values, [e.target.name]: e.target.value })
-    setLength(e.target.length)
+    setLength(values.about.length)
   }
 
   const handleCreation = async () => {
@@ -72,7 +65,7 @@ function Create() {
       if (show.uuid) {
         navigate(`/show?r=${show.token}`)
       }
-      
+
     } catch (error) {
       setDisable(false)
       setLoading(false)
@@ -82,65 +75,68 @@ function Create() {
 
   return (
     <Body>
-      <Sheet>
-        {loading && <LinearProgress />}
+      <Navigation />
+      <Wrapper>
+        <Sheet>
+          {loading && <LinearProgress />}
 
-        <Header
-          headline="Create a Talk Show"
-          tagline="Share ideas. Discuss what matters." />
-        <FormBox
-          method="POST"
-          onSubmit={handleSubmit(handleCreation, handleErrors)}
-        >
-          <Input
-            autoFocus
-            label="Talk Show Name"
-            name="name"
-            type="text"
-            value={values.name}
-            onFocus={handleOnFocus}
-            {...register("name", Pattern.name)}
-            error={Boolean(errors.name)}
-            helperText={errors.name?.message}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
-          
-          <Textarea
-            label={`Description ${length}/280`}
-            name="about"
-            type="text"
-            value={values.about}
-            onFocus={handleOnFocus}
-            {...register("about", Pattern.about)}
-            error={Boolean(errors.about)}
-            helperText={errors.about?.message}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            multiline
-            inputProps={{ maxLength: 280 }}
-          />
-          { length && (<Counter>{length} / 280</Counter>) }
-          <Flexbox>
-            <Button
-              variant='outlined'
-              disableElevation
-              onClick={() => { history.back() }}
-            > Cancel </Button>
+          <Header
+            headline="Create a Talk Show"
+            tagline="Share ideas. Discuss what matters." />
+          <FormBox
+            method="POST"
+            onSubmit={handleSubmit(handleCreation, handleErrors)}
+          >
+            <Input
+              autoFocus
+              label="Talk Show Name"
+              name="name"
+              type="text"
+              value={values.name}
+              onFocus={handleOnFocus}
+              {...register("name", Pattern.name)}
+              error={Boolean(errors.name)}
+              helperText={errors.name?.message}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+            />
 
-            <Button
-              type="submit"
-              color="primary"
-              variant='contained'
-              disableElevation
-              disabled={disable}
-            endIcon={<ArrowForward />}
-            > Continue </Button>
-          </Flexbox>
-        </FormBox>
-      </Sheet>
+            <Textarea
+              label="Description"
+              // label={`Description ${length}/280`}
+              name="about"
+              type="text"
+              value={values.about}
+              onFocus={handleOnFocus}
+              {...register("about", Pattern.about)}
+              error={Boolean(errors.about)}
+              helperText={errors.about?.message}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              multiline
+              // inputProps={{ maxLength: 281 }}
+            />
+            <Flexbox>
+              <Button
+                variant='outlined'
+                disableElevation
+                onClick={() => { history.back() }}
+              > Cancel </Button>
+
+              <Button
+                type="submit"
+                color="primary"
+                variant='contained'
+                disableElevation
+                disabled={disable}
+                endIcon={<ArrowForward />}
+              > Continue </Button>
+            </Flexbox>
+          </FormBox>
+        </Sheet>
+      </Wrapper>
     </Body>
   )
 }

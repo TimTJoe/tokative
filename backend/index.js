@@ -9,11 +9,11 @@ const cors = require("cors");
 const dotenv = require("dotenv").config({ path: "./config/config.env" });
 const port = process.env.PORT;
 const { Server } = require("socket.io")
-const radio = new Server(server, {
-  path: "/studio",
+const showroom = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
-    methods: ["GET","HEAD","PUT","PATCH","POST","DELETE"],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    credentials: true
   }
 })
 //SOCKET.IO NAMESPACES
@@ -61,21 +61,22 @@ const Logout = require("./auth/logout");
 const User = require("./api/User");
 const Station = require("./api/Station");
 const Studio = require("./api/Studio");
-const Radio = require("./api/Radio");
+const Showroom = require("./api/Showroom");
 const Show = require("./api/Show");
 
 
 //ROUTES MIDDLEWARE HANDLERS (CRUD MIDDLEWARE)
 app.get("/", Home);
+
 app.use("/login", Login);
 app.use("/logout", useAuth, Logout);
 app.use("/user", useAuth, User);
 app.use("/station", useAuth, Station);
 app.use("/studio", useAuth, Studio);
-app.use("/show", useAuth, Show);
+app.use("/show", Show);
 
 //HANDLING SOCKET.IO/WEBSOCKET CONNECTION
-radio.on("connection", Radio)
+showroom.on("connection", Showroom)
 
 //404 & Router Error Handlers
 app.use(NotFound);

@@ -33,7 +33,7 @@ const ShowsGrid = styled.div`
 `
 
 function Home() {
-    
+
     const location = useLocation()
     const { isAuth } = useContext(withAuth)
     const user = useUser();
@@ -49,7 +49,7 @@ function Home() {
                 <CreateShow />
                 <ShowsGrid>
                     {
-                        AllShows ? 
+                        AllShows ?
                             AllShows.map((show, key) => (
                                 <ShowCard
                                     name={show.name}
@@ -58,11 +58,11 @@ function Home() {
                                     about={show.about}
                                     token={show.token}
                                     key={key}
-                                    onClick={()=> {
+                                    onClick={() => {
                                         navigate(`/show?r=${show.token}`)
                                     }}
                                 />
-                        )) : "No Show..."
+                            )) : "No Show..."
                     }
                 </ShowsGrid>
             </Container>

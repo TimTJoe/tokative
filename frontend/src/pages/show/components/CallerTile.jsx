@@ -55,19 +55,21 @@ const MuiIconButton = styled(IconButton)`
 `
 
 
-function Tile(props) {
+function CallerTile(props) {
     const { calling } = useContext(withShow)
     return (
         <Container>
             <FlexBox>
-                <UserIcon src="/" alt={props.listener?.name || "Timothy T. Joe"} />
-                <Name variant='body1'>{props.listener?.name || "Timothy T. Joe"}</Name>
+                <UserIcon src="/" alt={props.caller?.name || "Timothy T. Joe"} />
+                <Name variant='body1'>{props.caller?.name || "Timothy T. Joe"}</Name>
             </FlexBox>
-            {/* <FlexBox>
+            <FlexBox>
                 {
                     calling && (
                         <>
-                            {props.caller?.name + " is calling"}
+                            <Typography>
+                                {props.caller?.name || "Timothy is calling"}
+                            </Typography>
                             <MuiButton variant='contained' color="primary" disableElevation>Answer</MuiButton>
                             <MuiIconButton>
                                 <Mic />
@@ -76,9 +78,9 @@ function Tile(props) {
                     )
 
                 }
-            </FlexBox> */}
+            </FlexBox>
         </Container>
     )
 }
 
-export default Tile
+export default CallerTile
