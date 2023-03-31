@@ -1,12 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { Typography } from '@mui/material'
 import styled from 'styled-components'
 import { useLocation, useSearchParams } from "react-router-dom"
 import withShow from "@contexts/withShow"
-import ReadMoreReact from 'read-more-react';
 import axios from 'axios'
-import ReadMore from './ReadMore'
 const DATA_URL = "http://localhost:8020/show/"
+import useTitle from "@hooks/useTitle"
 
 const Container = styled.div`
     padding: 12px;
@@ -25,6 +24,8 @@ const Name = styled(Typography)`
 const Para = styled(Typography)`
     && {
         font-size: .9rem;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 `
 
@@ -45,16 +46,28 @@ const Small = styled(Typography)`
     }
 `
 
-
 function Body() {
 
-    const { showName, aboutShow } = useContext(withShow)
+    const { hostName,
+        showName,
+        aboutShow,
+        ShowStatus,
+        GetStream,
+        stream,
+        hostVideo,
+        userRole,
+        handleUserRole,
+        handlePlaySound,
+        playing,
+        myAudio
+    } = useContext(withShow)
     const [show, setShow] = useState([]);
-    const [readMore, setReadMore] = useState(false)
+    const [readMore, setReadMore] = useState(true)
     let [searchParams, setSearchParams] = useSearchParams();
-    
     const token = searchParams.get("r");
     const location = useLocation()
+    const [role, setRole] = useState("")
+    // const [playing, setPlaying] = useState("")
     function handleRemore() { setReadMore(!readMore) }
 
     useEffect(() => {
@@ -65,20 +78,50 @@ function Body() {
         fetchShow();
     }, [location]);
 
+    const SHOWNAME = show.name || ""
+    const SHOWBODY = show.about || ""
+    useTitle(show.name)
+
+    const myVideo = useRef()
+
     return (
         <Container>
             <Name variant='h6'>
-                {showName ? showName : show.name}
+                {SHOWNAME}
             </Name>
             <Para variant='body1'>
-                {readMore ? aboutShow.substring(0, 280) : show.about }
-                <Small onClick={handleRemore}>
-                    {readMore ? "...Read more" : "...Show less"}
-                </Small>
+                {readMore ? SHOWBODY.slice(0, 280) : SHOWBODY}
+                {
+                    SHOWBODY.length > 280 && (
+                        <Small onClick={handleRemore}>
+                            {readMore ? "...Show more" : "...Show less"}
+                        </Small>
+                    )
+                }
+
             </Para>
             <Speaker>
-                <Para variant='body1'>Speaking: Timothy T. Joe </Para>
+                <Para variant='body1'>Host: {hostName} </Para>
             </Speaker>
+            {/* <audio ref={myAudio} controls autoPlay ></audio>
+            <div>
+                <h4>Role {userRole}</h4>
+                <button onClick={() => handleUserRole("client")}>Client</button>
+                <button onClick={() => handleUserRole("server")}>Server</button>
+            </div>
+            <div>
+                {
+                    userRole === "client" ? (
+                        <>
+                            <h3>Play sound</h3>
+                            <button onClick={handlePlaySound}>Play Sound</button>
+                        </>
+                    ) : null
+                }
+            </div>
+            <div>
+                <h4>Playing: {playing} </h4>
+            </div> */}
         </Container>
     )
 }

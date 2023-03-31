@@ -7,6 +7,9 @@ import getShowHost from "@helpers/getShowHost"
 import axios from "axios";
 const DATA_URL = "http://localhost:8020/show/host/";
 import { useNavigate } from 'react-router-dom'
+import withShow from '@contexts/withShow'
+
+
 
 const Showcard = styled.div`
     border-radius: 11px;
@@ -84,6 +87,8 @@ const Showname = styled(HeadText)`
         font-size: 1.25rem;
         line-height: 1.2;
         color: #f5f5f5;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 `
 
@@ -91,6 +96,8 @@ const Showbio = styled(Tagline)`
     && {
         padding: 5px 0;
         color: #fafafa;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 `
 
@@ -119,7 +126,7 @@ const JoinButton = styled(Button)`
 function ShowCard(props) {
     const [host, setHost] = useState()
     const navigate = useNavigate()
-    const goto = () => navigate("/show?r=" + props?.token)
+    const goJoinShow = () => navigate("/show?r=" + props?.token)
     let about = props?.about || "..."
     useEffect(() => {
         const fetchData = async () => {
@@ -140,15 +147,15 @@ function ShowCard(props) {
             <Showname> {props?.name} </Showname>
             <Showbio>
                 {
-                    about.length > 79 ?
-                        about.substring(0, 79) + "..." : about
+                    props.name.length > 55 ? null : 
+                    (about.length > 72 ? about.slice(0, 72) + "..." : about)
                 }
             </Showbio>
             <JoinButton
                 variant="contained"
                 color="primary"
                 disableElevation
-                onClick={goto}
+                onClick={goJoinShow}
             >Join</JoinButton>
         </Showcard>
     )

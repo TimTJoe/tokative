@@ -11,5 +11,26 @@
 html, body {
   height: 100%;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {margin: 0; background-color: transparent;}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #d1d1d1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #afafaf;
+  border-radius: 10px;
+  border: solid #d1d1d1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #999898;
+}

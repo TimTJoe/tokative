@@ -12,9 +12,6 @@ import CreateShow from '@pages/show/Create'
 import Show from '@pages/show'
 import Protected from "@components/Protected";
 axios.defaults.withCredentials = true;
-// import io from "socket.io-client"
-// const socket = io.connect("http://localhost:8020")
-
 
 function App() {
     const { isAuth } = useContext(withAuth)
@@ -25,7 +22,8 @@ function App() {
                 <Route path="/" element={<Home />}/>
                 <Route path="signup" element={<Signup />} />
                 <Route path="login" element={<Login />} />
-                <Route path="/:QueryString" element={<Show />} />
+                <Route path="/:QueryString" element={
+                    <Protected isAuth={isAuth}><Show /></Protected>} />
                 
                 <Route path="radio/:frequency" element={
                 <Protected isAuth={isAuth}><Studio /></Protected>} />

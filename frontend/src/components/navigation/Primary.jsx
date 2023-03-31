@@ -9,12 +9,13 @@ const Nav = styled.nav`
     justify-content: space-between;
     background-color: white;
     align-items: center;
-    padding: 12px 15px 6px 15px;
+    padding: 0 4px;
     box-shadow: 1px 2px 1px rgba(0,0,0,0.1);
 
 `
 
-function Navigation() {
+
+function Primary() {
     return (
         <Nav>
             <Link to={"/"}>
@@ -25,4 +26,4 @@ function Navigation() {
     )
 }
 
-export default Navigation
+export default Primary

@@ -69,7 +69,11 @@ const Pattern = {
   },
 
   about: {
-    // required: "Please add a description",
+    required: "Please add a description",
+    // maxLength: {
+    //   value: 280,
+    //   message: "Cannot be more then 280 characters."
+    // }
   },
 
   password: {

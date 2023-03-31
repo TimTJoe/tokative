@@ -1,6 +1,7 @@
 let constraints = { audio: true };
 
-navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
+navigator.mediaDevices.getUserMedia(constraints)
+    .then(function (mediaStream) {
 
     let mediaRecorder = new MediaRecorder(mediaStream);
 

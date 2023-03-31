@@ -9,7 +9,6 @@ const DATA_URL = "http://localhost:8020/studio"
  * @returns {Array} data
  * 
  */
-
 const useRoom = () => {
     const [room, setRoom] = useState([])
     const location = useLocation()
