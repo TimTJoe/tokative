@@ -6,16 +6,19 @@ import { BrowserRouter as Router } from "react-router-dom"
 import { ProvideUser } from '@contexts/withUser'
 import { ProvideAuth } from '@contexts/withAuth'
 import { ProvideShow } from '@contexts/withShow'
+import { ProvideSocket } from '@contexts/withSocket'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
     <ProvideAuth>
-      <ProvideUser>
-        <ProvideShow>
-          <App />
-        </ProvideShow>
-      </ProvideUser>
+      <ProvideSocket>
+        <ProvideUser>
+          <ProvideShow>
+            <App />
+          </ProvideShow>
+        </ProvideUser>
+      </ProvideSocket>
     </ProvideAuth>
   </Router>
 )

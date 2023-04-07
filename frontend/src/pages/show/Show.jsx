@@ -28,7 +28,7 @@ const Container = styled(MuiContainer)`
   }
   `
 
-const Show = () => {
+const Show = (props) => {
   //VARIABLES/STATE VARIABLES
   const location = useLocation()
   let [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +61,7 @@ const Show = () => {
         <Body />
         <Listeners />
       </Container>
-      <Footer />
+      <Footer socket={props.socket} />
     </Main>
   )
 }

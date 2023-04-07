@@ -1,18 +1,24 @@
-import React, { createContext, useEffect, useState, useRef } from 'react'
+import React, { createContext, useEffect, useState, useRef, useContext } from 'react'
 import useShow from '@hooks/useShow'
 import useUser from '@hooks/useUser'
 import useRole from "@hooks/useRole"
 import useHost from "@hooks/useHost"
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { io } from "socket.io-client"
-const socket = io("http://localhost:8020")
-import Peer from "simple-peer"
-export const withShow = createContext(null)
+import withSocket from "@contexts/withSocket"
+
+// import { io } from "socket.io-client"
+// const socket = io("http://localhost:8020")
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 export const AudioCtxt = new AudioContext();
-import audioFile from "./test.mp3"
 
+//FIXME: REMOVE
+const audioFile = "test.mp3"
+
+export const withShow = createContext(null)
 export function ProvideShow({ children }) {
+
+    const { socket } = useContext(withSocket)
+
     const location = useLocation()
     const [room, setRoom] = useState("")
     const [showName, setShowName] = useState("")
@@ -67,7 +73,7 @@ export function ProvideShow({ children }) {
     }
 
 
-    const GetStream = () => {}
+    const GetStream = () => { }
 
     useEffect(() => {
         setShowName(show.name)
@@ -78,7 +84,7 @@ export function ProvideShow({ children }) {
         // socket.on("Go_Live", data => {
         //     setStream(data.Stream)
         // })
-        console.log("Show is live!" )
+        console.log("Show is live!")
     }
 
     useEffect(() => {
@@ -92,20 +98,20 @@ export function ProvideShow({ children }) {
         }
 
         socket.on("play", PlayAudio)
-    
-      return () => {socket.off("play")}
+
+        return () => { socket.off("play") }
     }, [userRole])
-    
+
 
     function handlePlaySound() {
-        socket.emit("play", {name: "Test Sound", path: audioFile})
+        socket.emit("play", { name: "Test Sound", path: audioFile })
     }
 
     function handleUserRole(v) {
         setUserRole(v)
     }
 
-    
+
 
 
     const VALUES = {
