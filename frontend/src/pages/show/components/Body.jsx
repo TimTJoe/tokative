@@ -103,25 +103,7 @@ function Body() {
             <Speaker>
                 <Para variant='body1'>Host: {hostName} </Para>
             </Speaker>
-            {/* <audio ref={myAudio} controls autoPlay ></audio>
-            <div>
-                <h4>Role {userRole}</h4>
-                <button onClick={() => handleUserRole("client")}>Client</button>
-                <button onClick={() => handleUserRole("server")}>Server</button>
-            </div>
-            <div>
-                {
-                    userRole === "client" ? (
-                        <>
-                            <h3>Play sound</h3>
-                            <button onClick={handlePlaySound}>Play Sound</button>
-                        </>
-                    ) : null
-                }
-            </div>
-            <div>
-                <h4>Playing: {playing} </h4>
-            </div> */}
+
         </Container>
     )
 }

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import useShow from "@hooks/useShow";
 import useUser from "@hooks/useUser";
+import { useLocation } from "react-router-dom";
 
 export const isHost = () => {
+  const location = useLocation();
   const [role, setRole] = useState(false);
   const show = useShow();
   const user = useUser();
@@ -15,7 +17,7 @@ export const isHost = () => {
       setRole(false);
     }
     return () => {};
-  }, [user_uuid]);
+  }, [location, user_uuid]);
   return role;
 };
 

@@ -1,11 +1,15 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { Typography, IconButton, Stack, Slider } from '@mui/material'
 import styled from 'styled-components'
 import Button from './Button'
 import withShow from "@contexts/withShow"
 import useRole from '@hooks/useRole'
+import useAudioContext from '@hooks/useAudioContext'
+import withSocket from "@contexts/withSocket";
 import isHost from '@helpers/isHost'
 import { Phone, Pause, PlayArrow, VolumeDown, VolumeUp, RadioButtonCheckedRounded, RadioRounded, PhoneAndroid } from "@mui/icons-material"
+import StartStreaming from '../helpers/StartStreaming'
+import StartListening from '../helpers/StartListening'
 
 const Container = styled.div`
     position: fixed;
@@ -66,7 +70,9 @@ const FlexBox = styled.div`
     gap: 12px;
 `
 
-function Footer() {
+function Footer(props) {
+    const AudioContext = useAudioContext()
+    const { socket } = useContext(withSocket)
     const { hostName, GoLive, handleCalling } = useContext(withShow)
     const [play, setPlay] = useState(false)
     const [volume, setVolume] = useState(50)
@@ -78,6 +84,26 @@ function Footer() {
     const handleOnAir = () => { setOnAir(!onAir) }
     const handleVolume = (event, newVolume) => { setVolume(newVolume) }
     const handlePlay = () => { setPlay(!play) }
+
+    const [join, setJoin] = useState(false)
+    socket.on("Room_Joined", data => {
+        setJoin(!join)
+    })
+
+    // useEffect(() => {
+    function playStream(buffer) {
+        // if (!host) {
+        const source = AudioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(AudioContext.destination);
+        source.start();
+        console.log("Playing...")
+        // };
+    }
+    socket.on("stream", playStream)
+    // }, [join])
+
+
 
     return (
         <Container>
@@ -98,29 +124,28 @@ function Footer() {
                 </SliderBox>
             </FlexBox>
             <FlexBox>
-                {/* {
-                    host ? ( */}
-                {/* ) : ( */}
-                <FlexBox>
-                    <Text> Want to speak?</Text>
+
+                {host && (
                     <Button
                         variant='contained'
-                        color='primary'
+                        color='success'
                         disableElevation
-                        onClick={handleCalling}
-                        startIcon={<Phone />} >Call</Button>
-                </FlexBox>
-                {/* <Button
-                    variant='contained'
-                    color='success'
-                    disableElevation
-                    onClick={GoLive}
-                    startIcon={<RadioButtonCheckedRounded />} >Start</Button> */}
-                {/* )
-                } */}
-                {/* {
-                    onAir && ()
-                } */}
+                        onClick={() => StartStreaming(socket)}
+                        startIcon={<RadioButtonCheckedRounded />} >Go Live</Button>
+                )
+                    // (
+                    //     <FlexBox>
+                    //         <Text> Want to speak?</Text>
+                    //         <Button
+                    //             variant='contained'
+                    //             color='primary'
+                    //             disableElevation
+                    //             onClick={handleCalling}
+                    //             startIcon={<Phone />} >Call</Button>
+                    //     </FlexBox>
+                    // )
+                }
+
             </FlexBox>
         </Container >
     )
